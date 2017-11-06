@@ -1,0 +1,43 @@
+@charset "utf-8";
+/*通用*/
+body {
+	font: 10px "microsoft yahei", Arial, Helvetica, sans-serif;
+	color:#666;
+	margin:0px;
+	padding:0px;
+}
+ul,li,p,h1,h2,h3,h4,h5,h6,dl,dt,dd {
+	list-style: none;
+	margin:0px;
+	padding:0px;
+	border:none;
+}
+input {border:none;}
+.lf   {float:left;}
+.rt  {float:right;}
+.clear  {clear:both;}
+a{
+	text-decoration: none;
+	color:#666;
+}
+a:hover{
+	text-decoration: none;
+	color: #666;
+}
+.grade{
+	text-decoration: none;
+	color: #D2A975;
+}
+.grade:hover{
+	text-decoration: none;
+	color: #D2A975;
+}
+.prefer{
+	text-decoration: none;
+	color: #792128;
+}
+.prefer:hover{
+	text-decoration: none;
+	color: #792128;
+}
+

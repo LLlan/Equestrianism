@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, height=device-height,initial-scale=1.0,
+minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          name="viewport">
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script src="js/jquery-1.11.3.js"></script>
+    <title></title>
+</head>
+<body>
+<div class="container">
+    <div class="myCanvas">
+        <div class="title">
+            <p>2017年中国运动知识竞赛(马术篇)</p>
+            <ul>
+                <li class="col-flex-2"><img src="images/1.png"/></li>
+                <li class="col-flex-3"><h3>绝密试卷/第6题</h3></li>
+                <li class="col-flex-2"><img src="images/2.png"/></li>
+            </ul>
+        </div>
+        <div class="err">
+            <img src="images/(8).jpg" alt="" />
+            <div>
+                <img src="images/error.png"/>
+                <h2>回答错误</h2>
+            </div>
+        </div>
+        <div class="ok">
+            <img src="images/(8).jpg" alt="" />
+            <div>
+                <img src="images/ok.png"/>
+                <h2>回答正确</h2>
+            </div>
+        </div>
+
+        <div class="question">
+            <ul class="col-flex-1">
+                <li>
+                    <span>A</span><a href="#" class="col-flex-1"><b></b>站着</a>
+                </li>
+                <li>
+                    <span>B</span><a href="#" class="col-flex-1"><b></b>躺着</a>
+                </li>
+                <li>
+                    <span>C</span><a href="#" class="col-flex-1"><b></b>跪着</a>
+                </li>
+                <li>
+                    <span>D</span><a href="#" class="col-flex-1"><b></b>以上都可以</a>
+                </li>
+            </ul>
+            <a class="next" href="#">
+                <h2><br />下<br />一<br />题</h2>
+                <p>NEXT</p>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $(".myCanvas .question>ul li a").click(function(){
+
+            $(this).find("b").css('display','inline-block');
+            $(this).parent().siblings().find('b').css('display','none')
+        })
+        $(function(){
+            $(".next").click(function(){
+                location.href = "7.html"
+            })
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TextLink_typeMapper">
+	<!-- 添加信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into sys_textLink_type(
+			id,
+			type
+		)values(
+			#{id},
+			#{type}
+		)
+	</insert>
+	<!-- 列表一页的信息 -->
+	<select id="getlistPage" parameterType="page" resultType="pd" useCache="false">
+		select  *
+		from sys_textLink_type
+		<where>
+		 	<if test="pd.searchName!=null and pd.searchName!=''">
+		 		type LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%')
+		 	</if>
+		 </where>
+	</select>
+	<!-- 查询所有的信息 -->
+	<select id="getlistAll" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			*
+		 from sys_textLink_type
+	</select>
+	<!-- 根据ID查询指定信息 -->
+	<select id="getById" parameterType="pd" resultType="pd">
+		select
+			*
+		from sys_textLink_type 
+			where id=#{id}
+	</select>
+	
+	
+	<!-- 根据 type查询，判断是否已经存在-->
+	<select id="getByName" parameterType="pd" resultType="pd">
+		select
+			*
+		from sys_textLink_type 
+			where type=#{type}
+	</select>
+	
+	<!-- 更新指定的信息 -->
+	<update id="update" parameterType="pd">
+		update sys_textLink_type
+			set
+				type=#{type}
+			where id=#{id}
+	</update>
+	<!-- 删除指定的信息 -->
+	<delete id="delete" parameterType="pd">
+		delete from sys_textLink_type where id=#{id}
+	</delete>
+	<!-- 批量删除信息 -->
+	<delete id="deleteAll" parameterType="String" flushCache="false">
+		delete from sys_textLink_type
+		where
+			id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="arimOrderMapper">
+
+ <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> 
+ 	<!-- 新闻订单列表 -->
+ 	<select id="arimOrderlistPage" parameterType="page" resultType="pd">
+		select 
+			arimOrder_id,
+			arimOrder_title,
+			arimOrder_file,
+			arimOrder_content,
+			arim_id,
+			advertiser_id
+		from tb_arimOrder
+
+	</select>
+	
+	<!-- 保存新闻订单信息 -->
+	<insert id="saveArimOrder" parameterType="pd">
+		insert into tb_media(
+				arimOrder_id,
+				arimOrder_title,
+				arimOrder_file,
+				arimOrder_content,
+				arim_id,
+				advertiser_id
+		)
+			values(
+				#{arimOrder_id},
+				#{arimOrder_title},
+				#{arimOrder_file},
+				#{arimOrder_content},
+				#{arim_id},
+				#{advertiser_id}
+			)
+			
+	</insert>
+ 	<!-- 修改新闻订单信息 -->
+ 	<update id="updateArimOrder" parameterType="pd">
+			update
+				tb_arimOrder
+			set
+				
+				arimOrder_id = #{arimOrder_id},
+				arimOrder_title = #{arimOrder_title},
+				arimOrder_file = #{arimOrder_file},
+				arimOrder_content = #{arimOrder_content},
+				arim_id = #{arim_id},
+				advertiser_id = #{advertiser_id}
+				
+			where arimOrder_id = #{arimOrder_id}
+	</update>
+ 	<!-- 刪除新闻订单信息 -->
+ 	<delete id="delArimOrder" parameterType="pd">
+		delete from tb_arimOrder
+		where arimOrder_id = #{arimOrder_id}
+			
+	</delete>
+ 	<!-- 根據ID查詢新闻订单信息 -->
+ 	<select id="getDetailByID" parameterType="pd">
+		select 
+				arimOrder_id,
+				arimOrder_title,
+				arimOrder_file,
+				arimOrder_content,
+				arim_id,
+				advertiser_id
+		from tb_arimOrder
+		where arimOrder_id = #{arimOrder_id}
+			
+	</select>
+ 
+ 
+ </mapper>

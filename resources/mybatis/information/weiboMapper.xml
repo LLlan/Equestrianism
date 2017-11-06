@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="weiboMapper">
+	<!-- 添加信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into tb_source_microBblog(
+			microBlog_id,
+			microBlogHttp,
+			f_id,
+			checkedState,
+			sourceState
+		)values(
+			#{microBlog_id},
+			#{microBlogHttp},
+			#{f_id},
+			#{checkedState},
+			#{sourceState}
+		)
+	</insert>
+	<!-- 
+		根据粉丝数进行降序查找
+	 -->
+	 <select id="getlistAllorderbyfansNum" parameterType="pd" resultType="pd" useCache="false">
+		 select 
+			tsm.microBlog_id,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.city
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		<where>
+			tsm.checkedState='1'
+			and tsm.sourceState='1'
+		</where>
+		order by ABS(tbi.fansNum) DESC
+	</select>
+	<!-- 
+		查询所有的信息(前台页面展示)
+	 -->
+	<select id="getlistAll" parameterType="pd" resultType="pd" useCache="false">
+		 select 
+			tsm.microBlog_id,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.city
+		from tb_source_microBblog tsm
+		
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		  
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsm.microBlog_id
+		<where>
+		tsm.checkedState='1'
+			and tsm.sourceState='1'
+			<if test="minFansNum != null and maxFansNum != null">
+				and tbi.fansNum BETWEEN #{minFansNum} and #{maxFansNum}
+			</if>
+			<if test="minFansNum == null and maxFansNum !=null">
+				and tbi.fansNum &gt; #{maxFansNum}
+			</if>
+			<if test="minPrice !=null and maxPrice !=null">
+				and ttp.price BETWEEN #{minPrice} and #{maxPrice}
+			</if>
+			<if test="minPrice == null and maxPrice !=null">
+				and ttp.price &gt; #{maxPrice}
+			</if>
+			<if test="area != null">
+				and (tbi.city LIKE CONCAT(CONCAT('%', #{area}),'%') or tbi.province LIKE CONCAT(CONCAT('%', #{area}),'%'))
+			</if>
+		</where>
+		group by tsm.microBlog_id
+	</select>
+	<!-- 
+		
+		根据媒介主的id查询其发布的所有微博的资源查信息 
+	
+	-->
+	<select id="getlistAllbyfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			tsm.microBlog_id,
+			tsm.checkedState,
+			tsm.sourceState,
+			tsm.microBlogHttp,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.city,
+			tbi.province,
+			tbi.fansNum
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		where
+		  tsm.f_id=#{f_id}
+		  <if test="checkedState!='' and checkedState!=null">
+		  	and tsm.checkedState=#{checkedState}
+		  </if>
+		  <if test="sourceState!='' and sourceState!=null">
+		  	and tsm.sourceState=#{sourceState}
+		  </if>
+		 order by tbi.time desc 
+	</select>
+	<!-- 根据ID查询指定信息 -->
+	<select id="getById" parameterType="pd" resultType="pd">
+		select 
+			tsm.microBlog_id,
+			tsm.microBlogHttp,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		where 	
+		  tsm.microBlog_id=#{tag_id}	
+	</select>
+	<!-- 
+		媒介主资源管理列表
+	 -->
+	<select id="getsourcelistbyfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			tsm.microBlog_id,
+			tsm.checkedState,
+			tsm.sourceState,
+			tbi.headImgURL,
+			tbi.`name`,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tb_temp.prices,
+			tb_temp.`names`
+		from tb_source_microbblog tsm 
+		LEFT JOIN tb_advertiser tad ON tad.advertiser_id=tsm.f_id
+		left join (
+	
+			select GROUP_CONCAT(tb2.price)prices,GROUP_CONCAT(tb2.`name`)`names`,tb2.f_id from 
+				(
+					select ttp.f_id,ttp.price,ttp.`name` from tb_type_price ttp 
+					WHERE
+					ttp.f_id IN (
+						SELECT tsm.microBlog_id  FROM tb_source_microbblog tsm  WHERE tsm.f_id=#{f_id}
+					)
+				)tb2
+				GROUP BY tb2.f_id
+		)tb_temp on tb_temp.f_id = tsm.microBlog_id
+		LEFT JOIN tb_base_information tbi  ON tbi.f_id=tsm.microBlog_id
+		where tad.advertiser_id=#{f_id}
+	</select>
+<!-- 根据ID和name查询指定信息 -->
+	<select id="getByIdandname" parameterType="pd" resultType="pd">
+		select 
+			tsm.microBlog_id,
+			tsm.microBlogHttp,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp  ON tsm.microBlog_id=ttp.f_id
+		where 	
+		  tsm.microBlog_id=#{tag_id}	 and ttp.name=#{name}
+	</select>
+	<!-- 更新指定的信息 -->
+	<update id="update" parameterType="pd">
+		update tb_source_microBblog
+			set
+				microBlogHttp=#{microBlogHttp},
+				checkedState=#{checkedState},
+				sourceState=#{sourceState}
+			where microBlog_id=#{microBlog_id}
+	</update>
+	
+	<!-- 更新资源的状态（更改为启用） -->
+	<update id="changeStatetoYes" parameterType="pd">
+		update tb_source_microBblog
+			set
+				sourceState="1"
+		where microBlog_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 更新资源的状态（更改为下架） -->
+	<update id="changeStatetoNo" parameterType="pd">
+		update tb_source_microBblog
+			set
+				sourceState="0"
+		where microBlog_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	
+	<!--===========================================================================================  -->
+	<!--============================订单部分功能===============================================================  -->
+	
+	
+	<!-- 
+		由详情进入订单页
+	 -->
+	 <select id="detailgotoorder" parameterType="pd" resultType="pd">
+		select 
+			tsm.microBlog_id,
+			tsm.microBlogHttp,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price,
+			ttp.name as name1
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsm.microBlog_id
+		where 	
+		  tsm.microBlog_id=#{tag_id} and ttp.name=#{name}
+	</select>
+	<!--  
+		创建订单页面中的点击添加资源
+	-->
+	<select id="getOrderAddResourceList" parameterType="pd" resultType="pd">
+		select 
+			tsm.microBlog_id,
+			tsm.microBlogHttp,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		where
+		  tsm.checkedState='1'
+		  and tsm.sourceState='1'
+		  and tsm.microBlog_id not in
+		  <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!--  
+		创建订单时的添加资源中的资源选择
+	-->
+	<select id="getresourcelist" parameterType="pd" resultType="pd">
+		select 
+			tsm.microBlog_id,
+			tsm.microBlogHttp,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+		where
+		  tsm.microBlog_id in
+		  <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- 添加订单信息 -->
+	<insert id="insertOrder" parameterType="pd">
+		insert into tb_order_microbblog(
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			content,
+			zhifapeitu,
+			zhuanfa_link,
+			zhuanfayu,
+			remarks,
+			proveURL,
+			order_number,
+			f_id
+		)values(
+			#{id},
+			#{type_name},
+			#{name},
+			#{beginTime},
+			#{order_time},
+			#{content},
+			#{zhifapeitu},
+			#{zhuanfa_link},
+			#{zhuanfayu},
+			#{remarks},
+			#{proveURL},
+			#{order_number},
+			#{f_id}
+		)
+	</insert>
+	<!-- 查询订单列表
+	<select id="getOrderlist" parameterType="pd" resultType="pd">
+		select 
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			order_number
+		from tb_order_microbblog
+		where 
+			f_id=#{f_id}
+		order by order_time desc
+	</select>
+	 -->
+	<!-- 广告主查询订单信息 -->
+	<select id="getOrderInformationList" parameterType="pd" resultType="pd">
+		SELECT
+			tom.order_number,
+			tom.order_time,
+			tom.`name`,
+			tom.type_name,
+			tbi.`name` resource_name,
+			tsm.microBlogHttp,
+			ttp.price,
+			tom.beginTime,
+			tor.order_state
+		FROM tb_order_microbblog tom
+		LEFT JOIN tb_order_resource tor ON tor.order_number=tom.order_number
+		LEFT JOIN tb_source_microbblog tsm ON tor.resource_id=tsm.microBlog_id
+		LEFT JOIN tb_type_price ttp ON tor.resource_id=ttp.f_id
+		LEFT JOIN tb_base_information tbi ON tor.resource_id=tbi.f_id
+		WHERE 
+			tom.f_id=#{f_id} AND ttp.`name`=tom.type_name
+			<if test="order_state!='' and order_state!=null">
+			AND tor.order_state=#{order_state}
+			</if>
+			<if test="order_name!='' and order_name!=null">
+			AND tom.`name`=#{order_name}
+			</if>
+			<if test="order_number!='' and order_number!=null">
+			AND tom.order_number=#{order_number}
+			</if>
+		ORDER BY tom.order_time DESC
+	</select>
+	<!-- 媒介主查询订单列表信息 -->
+	<select id="getMjzOrderInformationList" parameterType="pd" resultType="pd" useCache="false">
+		SELECT
+			top.order_number,
+			top.order_time,
+			top.`name` order_name,
+			top.type_name,
+			typ.`name` source_name,
+			typ.microBlogHttp,
+			top.beginTime,
+			typ.mjzorder_state
+		FROM
+			tb_order_microbblog top
+		LEFT JOIN (
+			SELECT
+				tti.microBlogHttp,
+				tti.`name`,
+				tti.f_id,
+				tos.order_number,
+				tos.mjzorder_state,
+				tos.resource_type
+			FROM
+				tb_order_resource tos
+			LEFT JOIN (
+				SELECT
+					tsp.microBlog_id,
+					tsp.microBlogHttp,
+					tbi.`name`,
+					tsp.f_id
+				FROM
+					tb_source_microbblog tsp
+				LEFT JOIN tb_base_information tbi ON tbi.f_id = tsp.microBlog_id
+			) tti ON tos.resource_id = tti.microBlog_id
+		) typ ON top.order_number=typ.order_number
+		WHERE
+			typ.resource_type = '3' AND typ.f_id = '2de7f0bb94744ec191c5199398f6e0bb'
+			ORDER BY top.order_time DESC
+	</select>
+	<!--============================后台服务号功能===============================================================  -->
+	<!-- 
+		查询所有的信息(后台系统设置页面展示)
+	 -->
+	 <select id="sysgetlistPage" parameterType="page" resultType="pd" useCache="false">
+		 select 
+			tsm.microBlog_id,
+			tsm.microBlogHttp,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			tsm.checkedState,
+			tbi.time
+		from tb_source_microBblog tsm
+		  LEFT JOIN tb_base_information tbi  ON tsm.microBlog_id=tbi.f_id
+	  <where>
+	 	<if test="pd.searchName!=null and pd.searchName!=''">
+	 		tbi.name LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%') 
+	 	</if>
+	 	<if test="pd.selectName!=null and pd.selectName!=''">
+	 		and tsm.checkedState=#{pd.selectName}
+	 	</if>
+    </where>
+		order by tbi.time desc  
+	</select>
+	<!-- 
+		系统审核功能之审核不通过
+	 -->
+	 <update id="syscheckedNo" parameterType="pd">
+		update tb_source_microBblog
+			set
+				checkedState=#{checkedState}
+			where microBlog_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之审核通过
+	 -->
+	 <update id="syscheckedYes" parameterType="pd">
+		update tb_source_microBblog
+			set
+				checkedState=#{checkedState},
+				sourceState=#{sourceState}
+			where microBlog_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之批量审核不通过
+	 -->
+	 <update id="syscheckedNoAll" parameterType="pd">
+		update tb_source_microBblog
+			set
+				checkedState="0"
+			where microBlog_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 
+		系统审核功能之批量审核通过
+	 -->
+	 <update id="syscheckedYesAll" parameterType="pd">
+		update tb_source_microBblog
+			set
+				checkedState="1",
+				sourceState="1"
+			where microBlog_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	
+	
+</mapper>

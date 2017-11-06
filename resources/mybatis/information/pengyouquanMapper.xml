@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pengyouquanMapper">
+	<!-- 添加信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into tb_source_wcFriends(
+			WCfriends_id,
+			account,
+			fansNumImgURL,
+			f_id,
+			checkedState,
+			sourceState,
+			sex,
+			informationImgURL
+		)values(
+			#{WCfriends_id},
+			#{account},
+			#{fansNumImgURL},
+			#{f_id},
+			#{checkedState},
+			#{sourceState},
+			#{sex},
+			#{informationImgURL}
+		)
+	</insert>
+	<!-- 
+		查询所有的信息(前台页面展示)
+	 -->
+	<select id="getlistAll" parameterType="pd" resultType="pd" useCache="false">
+		 select 
+			tsw.WCfriends_id,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.city
+		 from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi ON tsw.WCfriends_id=tbi.f_id
+		  
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCfriends_id
+		<where>
+		tsw.checkedState='1'
+			and tsw.sourceState='1'
+			<if test="minFansNum != null and maxFansNum != null">
+				and tbi.fansNum &gt;= #{minFansNum} and tbi.fansNum &lt;= #{maxFansNum}
+			</if>
+			<if test="minFansNum == null and maxFansNum !=null">
+				and tbi.fansNum &gt; #{maxFansNum}
+			</if>
+			<if test="minPrice !=null and maxPrice !=null">
+				and ttp.price BETWEEN #{minPrice} and #{maxPrice}
+			</if>
+			<if test="minPrice == null and maxPrice !=null">
+				and ttp.price &gt; #{maxPrice}
+			</if>
+			<if test="area != null">
+				and (tbi.city LIKE CONCAT(CONCAT('%', #{area}),'%') or tbi.province LIKE CONCAT(CONCAT('%', #{area}),'%'))
+			</if>
+		</where>
+		group by tsw.WCfriends_id
+	</select>
+	<!-- 
+		
+		根据媒介主的id查询其发布的所有微信公众号的资源查信息 
+	
+	-->
+	<select id="getlistAllbyfid" parameterType="pd" resultType="pd" useCache="false">
+		 select 
+			tsw.WCfriends_id,
+			tsw.checkedState,
+			tsw.sourceState,
+			tsw.sex,
+			tbi.headImgURL,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.city,
+			tbi.province,
+			ttp.price
+		 from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi ON tsw.WCfriends_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCfriends_id
+		where
+		  tsw.f_id=#{f_id}
+		  <if test="checkedState!='' and checkedState!=null">
+		  	and tsw.checkedState=#{checkedState}
+		  </if>
+		  <if test="sourceState!='' and sourceState!=null">
+		  	and tsw.sourceState=#{sourceState}
+		  </if>
+		 order by tbi.time desc
+	</select>
+	<!-- 根据ID查询指定信息 -->
+	<select id="getById" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCfriends_id,
+			tsw.account,
+			tsw.fansNumImgURL,
+			tsw.informationImgURL,
+			tsw.sex,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price
+		from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCfriends_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCfriends_id
+		where 	
+		  tsw.WCfriends_id=#{tag_id}	
+	</select>
+	<!-- 根据ID和name查询指定信息 -->
+	<select id="getByIdandname" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCfriends_id,
+			tsw.account,
+			tsw.fansNumImgURL,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price
+		from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCfriends_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp  ON tsw.WCfriends_id=ttp.f_id
+		where 	
+		  tsw.WCfriends_id=#{tag_id} and ttp.name=#{name}
+	</select>
+	<!-- 更新指定的信息 -->
+	<update id="update" parameterType="pd">
+		update tb_source_wcFriends
+			set
+				account=#{account},
+				fansNumImgURL=#{fansNumImgURL},
+				checkedState=#{checkedState},
+				sourceState=#{sourceState},
+				sex=#{sex},
+				informationImgURL=#{informationImgURL}
+			where WCfriends_id=#{WCfriends_id}
+	</update>
+<!-- 更新资源的状态（更改为启用） -->
+	<update id="changeStatetoYes" parameterType="pd">
+		update tb_source_wcFriends
+			set
+				sourceState="1"
+		where WCfriends_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 更新资源的状态（更改为下架） -->
+	<update id="changeStatetoNo" parameterType="pd">
+		update tb_source_wcFriends
+			set
+				sourceState="0"
+		where WCfriends_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	
+	<!--=====================================================================================================  -->
+	<!--============================订单部分=========================================================================  -->
+	
+	
+	<!-- 
+		由详情进入订单页
+	 -->
+	 <select id="detailgotoorder" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCfriends_id,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price,
+			ttp.name as name1
+		from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCfriends_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCfriends_id
+		where 	
+		  tsw.WCfriends_id=#{tag_id}
+	</select>
+	<!--  
+		创建订单页面中的点击添加资源
+	-->
+	<select id="getOrderAddResourceList" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCfriends_id,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price
+		from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCfriends_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCfriends_id
+		where
+		  tsw.checkedState='1'
+		  and tsw.sourceState='1'
+		  and tsw.WCfriends_id not in
+		  <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!--  
+		创建订单时的添加资源中的资源选择
+	-->
+	<select id="getresourcelist" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCfriends_id,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.headImgURL,
+			ttp.price
+		from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCfriends_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCfriends_id
+		where
+		  tsw.WCfriends_id in
+		  <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>	
+	<!-- 添加订单信息 -->
+	<insert id="insertOrder" parameterType="pd">
+		insert into tb_order_wcfriends(
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			zhuanfa_link,
+			steps,
+			fenxiangyu,
+			remarks,
+			proveURL,
+			order_number,
+			f_id
+		)values(
+			#{id},
+			#{type_name},
+			#{name},
+			#{beginTime},
+			#{order_time},
+			#{zhuanfa_link},
+			#{steps},
+			#{fenxiangyu},
+			#{remarks},
+			#{proveURL},
+			#{order_number},
+			#{f_id}
+		)
+	</insert>
+	
+	
+	
+	<!-- 广告主查询订单信息 -->
+	<select id="getOrderInformationList" parameterType="pd" resultType="pd">
+		SELECT
+			tow.order_number,
+			tow.order_time,
+			tow.`name`,
+			tow.type_name,
+			tbi.`name` resource_name,
+			tsw.account,
+			ttp.price,
+			tow.beginTime,
+			tor.order_state
+		FROM tb_order_wcfriends tow
+		LEFT JOIN tb_order_resource tor ON tor.order_number=tow.order_number
+		LEFT JOIN tb_source_wcfriends tsw ON tor.resource_id=tsw.WCfriends_id
+		LEFT JOIN tb_type_price ttp ON tor.resource_id=ttp.f_id
+		LEFT JOIN tb_base_information tbi ON tor.resource_id=tbi.f_id
+		WHERE 
+			tow.f_id=#{f_id} AND ttp.`name`=tow.type_name
+			<if test="order_state!='' and order_state!=null">
+			AND tor.order_state=#{order_state}
+			</if>
+			<if test="order_name!='' and order_name!=null">
+			AND tow.`name`=#{order_name}
+			</if>
+			<if test="order_number!='' and order_number!=null">
+			AND tow.order_number=#{order_number}
+			</if>
+		ORDER BY tow.order_time DESC
+	</select>
+	<!-- 媒介主查询订单列表信息 -->
+	<select id="getMjzOrderInformationList" parameterType="pd" resultType="pd" useCache="false">
+		SELECT
+			tof.order_number,
+			tof.order_time,
+			tof.`name` order_name,
+			tof.type_name,
+			typ.`name` source_name,
+			typ.account,
+			tof.beginTime,
+			typ.mjzorder_state
+		FROM
+			tb_order_wcfriends tof
+		LEFT JOIN (
+			SELECT
+				tti.account,
+				tti.`name`,
+				tti.f_id,
+				tos.order_number,
+				tos.mjzorder_state,
+				tos.resource_type
+			FROM
+				tb_order_resource tos
+			LEFT JOIN (
+				SELECT
+					tsf.WCfriends_id,
+					tsf.account,
+					tsf.f_id,
+					tbi.`name`
+				FROM
+					tb_source_wcfriends tsf
+				LEFT JOIN tb_base_information tbi ON tbi.f_id = tsf.WCfriends_id
+			) tti ON tos.resource_id = tti.WCfriends_id
+		) typ ON tof.order_number=typ.order_number
+		WHERE
+		typ.resource_type = '2' AND typ.f_id=#{f_id}
+		ORDER BY tof.order_time DESC
+	</select>
+	
+	
+	
+	
+	
+	<!-- 查询订单列表 
+	<select id="getOrderlist" parameterType="pd" resultType="pd">
+		select 
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			order_number
+		from tb_order_wcfriends
+		where 
+			f_id=#{f_id}
+		order by order_time desc
+	</select>
+	-->	
+	<!-- 根据订单号去查询订单信息 -->
+	<select id="getlistByorder_number" parameterType="pd" resultType="pd">
+		select 
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			order_number
+		from tb_order_wcfriends
+		where 
+			order_number=#{order_number}
+		order by order_time desc
+	</select>
+<!--============================后台系统功能=========================================================================  -->
+	<!-- 
+		查询所有的信息(后台系统设置页面展示)
+	 -->
+	 <select id="sysgetlistPage" parameterType="page" resultType="pd" useCache="false">
+		 select 
+			tsw.WCfriends_id,
+			tsw.account,
+			tbi.name,
+			tsw.sex,
+			tbi.fansNum,
+			tbi.headImgURL,
+			tsw.fansNumImgURL,
+			tsw.informationImgURL,
+			tsw.checkedState,
+			tbi.time
+		from tb_source_wcFriends tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCfriends_id=tbi.f_id
+	  <where>
+	 	<if test="pd.searchName!=null and pd.searchName!=''">
+	 		tbi.name LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%') 
+	 		or tsw.account LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%')
+	 	</if>
+	 	<if test="pd.selectName!=null and pd.selectName!=''">
+	 		and tsw.checkedState=#{pd.selectName}
+	 	</if>
+    </where>
+		order by tbi.time desc  
+	</select>
+	
+	<!-- 
+		系统审核功能之审核不通过
+	 -->
+	 <update id="syscheckedNo" parameterType="pd">
+		update tb_source_wcFriends
+			set
+				checkedState=#{checkedState}
+			where WCfriends_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之审核通过
+	 -->
+	 <update id="syscheckedYes" parameterType="pd">
+		update tb_source_wcFriends
+			set
+				checkedState=#{checkedState},
+				sourceState=#{sourceState}
+			where WCfriends_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之批量审核不通过
+	 -->
+	 <update id="syscheckedNoAll" parameterType="pd">
+		update tb_source_wcFriends
+			set
+				checkedState="0"
+			where WCfriends_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 
+		系统审核功能之批量审核通过
+	 -->
+	 <update id="syscheckedYesAll" parameterType="pd">
+		update tb_source_wcFriends
+			set
+				checkedState="1",
+				sourceState="1"
+			where WCfriends_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+</mapper>

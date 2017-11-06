@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="type_priceMapper">
+	<!-- 添加信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into tb_type_price(
+			id,
+			name,
+			price,
+			f_id
+		)values(
+			#{id},
+			#{name},
+			#{price},
+			#{f_id}
+		)
+	</insert>
+	<!-- 根据fid和name查询 -->
+	<select id="getdateByfidandName" parameterType="pd" resultType="pd" useCache="false">
+	select 
+			*
+		 from tb_type_price ttp
+	where 
+		ttp.f_id=#{tag_id}
+		and ttp.name=#{name}
+	</select>
+	
+	<!-- 查询全部微信公众号用 -->
+	<select id="getlistAllByfid" parameterType="pd" resultType="pd" useCache="false">
+	select 
+			*
+		 from tb_type_price ttp
+	where 
+		ttp.f_id=#{tag_id}
+		and ttp.`name` in ('单图文硬广','单图文软广','多图文第一条硬广','多图文第一条软广','多图文第二条硬广','多图文第二条软广','多图文第3~N条硬广','多图文第3~N条软广')
+	order by FIND_IN_SET(ttp.`name`,'单图文硬广,单图文软广,多图文第一条硬广,多图文第一条软广,多图文第二条硬广,多图文第二条软广,多图文第3~N条硬广,多图文第3~N条软广')
+	</select>
+	<!-- 查询全部微信朋友圈用 -->
+	<select id="getlistAllByfid1" parameterType="pd" resultType="pd" useCache="false">
+	select 
+			*
+		 from tb_type_price ttp
+	where 
+		ttp.f_id=#{tag_id}
+	</select>
+	<!-- 查询全部微博用 -->
+	<select id="getlistAllByfid2" parameterType="pd" resultType="pd" useCache="false">
+	select 
+			*
+		 from tb_type_price ttp
+	where 
+		ttp.f_id=#{tag_id}
+		and ttp.`name` in ('硬广直发','硬广转发','软广直发','软广转发')
+	order by FIND_IN_SET(ttp.`name`,'硬广直发,硬广转发,软广直发,软广转发')
+	</select>
+	<!-- 更新指定的信息 -->
+	<update id="update" parameterType="pd">
+		update tb_type_price
+			set
+				price=#{price}
+			where id=#{id}
+	</update>
+	<!-- 我的添加 -->
+	<insert id="save" parameterType="pd">
+		insert into tb_type_price(
+			id,
+			name,
+			price,
+			f_id
+		)values(
+			#{id},
+			#{name},
+			#{price},
+			#{media_id}
+		)
+	</insert>
+	
+</mapper>

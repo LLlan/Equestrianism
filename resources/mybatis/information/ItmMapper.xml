@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itemMapper">
+	
+	
+	<!-- 列表 -->
+	<select id="itemlistPage" parameterType="page" resultType="pd">
+		select
+				item_id,	
+				serial,	
+				item_name,	
+				right_answer,
+				image1,	
+				image2,
+				item_time
+		from 
+				tb_item 
+		where
+			1 = 1
+		order by item_time
+	
+	</select>
+	
+	<delete id="chongkao" parameterType="pd">
+		delete from tb_fenshu 
+			where fenshu_ip = #{fenshu_ip}
+	
+	</delete>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into tb_item(
+			item_id,	
+			serial,	
+			item_name,	
+			right_answer,
+			image1,	
+			image2,
+			item_time
+		) values (
+			#{item_id},	
+			#{serial},	
+			#{item_name},	
+			#{right_answer},	
+			#{image1},	
+			#{image2},
+			#{item_time}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="del" parameterType="pd">
+		delete from tb_item
+		where 
+			item_id = #{item_id}
+	</delete>
+	
+	
+	<!-- 删除图片 -->
+	<update id="delTp" parameterType="pd">
+		update  tb_item
+			set 
+				image1= ''
+			where 
+				item_id = #{item_id}
+	</update>
+	
+	<!-- 删除图片 -->
+	<update id="delTp2" parameterType="pd">
+		update  tb_item
+			set 
+				image2= ''
+			where 
+				item_id = #{item_id}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="pd">
+		update  tb_item
+			set 
+				item_name = #{item_name},
+				right_answer = #{right_answer},
+				image1 = #{image1},
+				image2 = #{image2}
+			where 
+				item_id = #{item_id}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			item_id,	
+			serial,	
+			item_name,	
+			right_answer,
+			image1,	
+			image2
+		from 
+			tb_item
+		where 
+			item_id = #{item_id}
+	</select>
+	
+	
+	<!-- 通过随机数ID获取数据 -->
+	<select id="findByRandomId" parameterType="pd" resultType="pd">
+		select 
+			item_id,	
+			serial,	
+			item_name,	
+			right_answer,
+			image1,	
+			image2
+		from 
+			tb_item
+		where 
+			serial = #{serial}
+	</select>
+	
+	<select id="getAnswerById" parameterType="pd" resultType="pd">
+		select 
+			ti.right_answer ranswer,
+			ti.image2
+		from 
+			tb_item ti 
+		where ti.item_id = #{item_id}
+	</select>
+	
+	<select id="getFenshuByIp" parameterType="pd" resultType="pd">
+		select 
+			tf.fenshu fenshu,
+			tf.count count 
+		from tb_fenshu tf  
+		where tf.fenshu_ip = #{clientIp}
+	</select>
+	
+	<update id="updateFenshu" parameterType="pd">
+			update tb_fenshu tf set tf.fenshu = #{fs} 
+		where tf.fenshu_ip = #{fenshu_ip}
+	</update>
+	
+	<update id="updateCount" parameterType="pd">
+			update tb_fenshu  tf 
+				set tf.count = #{count}
+			where tf.fenshu_ip = #{fenshu_ip}
+	</update>
+	
+	<insert id="savefenshu" parameterType="pd">
+		insert into tb_fenshu(
+			fenshu_id,
+			fenshu_ip,
+			fenshu,
+			count
+		) values(
+			#{fenshu_id},
+			#{fenshu_ip},
+			#{fenshu},
+			#{count}
+		)
+	</insert>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.COMID,	
+				a.NAME,	
+				a.TYPE,	
+				a.IMGURL,
+				a.ORIGINALPRICE,	
+				a.DISCOUNTPRICE,	
+				a.PACKAGE,	
+				a.BUYNOTICE,	
+				a.DESCRIBES,	
+				a.DETAIL,	
+				a.ISHOME,
+				a.ISREC,
+				a.STATUS,	
+				a.ADDUSER,	
+				a.ADDTIME,	
+				a.GOOD_ID
+		from 
+				TB_GOOD a
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listHomeRec" parameterType="pd" resultType="pd">
+		select
+				a.COMID,	
+				a.NAME,	
+				a.TYPE,	
+				a.IMGURL,
+				a.ORIGINALPRICE,	
+				a.DISCOUNTPRICE,	
+				a.PACKAGE,	
+				a.BUYNOTICE,	
+				a.DESCRIBES,	
+				a.DETAIL,	
+				a.ISHOME,
+				a.ISREC,
+				a.STATUS,	
+				a.ADDUSER,	
+				a.ADDTIME,	
+				a.GOOD_ID
+		from 
+				TB_GOOD a
+	    where 
+		     a.ISHOME = 1
+		     and
+		     a.STATUS = 1
+		     
+	    order by a.ADDTIME desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listRec" parameterType="pd" resultType="pd">
+		select
+				a.COMID,	
+				a.NAME,	
+				a.TYPE,	
+				a.IMGURL,
+				a.ORIGINALPRICE,	
+				a.DISCOUNTPRICE,	
+				a.PACKAGE,	
+				a.BUYNOTICE,	
+				a.DESCRIBES,	
+				a.DETAIL,	
+				a.ISHOME,
+				a.ISREC,
+				a.STATUS,	
+				a.ADDUSER,	
+				a.ADDTIME,	
+				a.GOOD_ID
+		from 
+				TB_GOOD a
+	    where 
+		     a.ISREC = 1
+		     and
+		     a.STATUS = 1
+		     
+	    order by a.ADDTIME desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listByComId" parameterType="pd" resultType="pd">
+		select
+				a.COMID,	
+				a.NAME,	
+				a.TYPE,	
+				a.IMGURL,
+				a.ORIGINALPRICE,	
+				a.DISCOUNTPRICE,	
+				a.PACKAGE,	
+				a.BUYNOTICE,	
+				a.DESCRIBES,	
+				a.DETAIL,	
+				a.ISHOME,
+				a.ISREC,
+				a.STATUS,	
+				a.ADDUSER,	
+				a.ADDTIME,	
+				a.GOOD_ID
+		from 
+				TB_GOOD a
+	    where 
+		     a.COMID = #{COMID}
+		     and
+		     a.STATUS = 1
+		     
+	    order by a.ADDTIME desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listByType" parameterType="pd" resultType="pd">
+		select
+				a.COMID,	
+				a.NAME,	
+				a.TYPE,	
+				a.IMGURL,
+				a.ORIGINALPRICE,	
+				a.DISCOUNTPRICE,	
+				a.PACKAGE,	
+				a.BUYNOTICE,	
+				a.DESCRIBES,	
+				a.DETAIL,	
+				a.ISHOME,
+				a.ISREC,
+				a.STATUS,	
+				a.ADDUSER,	
+				a.ADDTIME,	
+				a.GOOD_ID
+		from 
+				TB_GOOD a
+	    where 
+		     a.TYPE = #{TYPE}
+		     and
+		     a.STATUS = 1
+		     
+	    order by a.ADDTIME desc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from TB_GOOD
+		where 
+			GOOD_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	
+	
+	<insert id="saveJoin" parameterType="pd">
+			insert into tb_join(
+				join_id,
+				join_name,
+				join_phone,
+				join_address,
+				join_ip,
+				join_time
+			)values(
+				#{join_id},
+				#{join_name},
+				#{join_phone},
+				#{join_address},
+				#{join_ip},
+				#{join_time}
+			)
+		
+	</insert>
+	
+</mapper>

@@ -1,0 +1,296 @@
+/******************����*****************/
+.top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 888;
+  font-size: 12px;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+
+  background-color: #ECECEC;
+}
+.middle{
+  display: flex;
+  width:1160px;
+  margin: 0 auto;
+}
+
+.top_left{
+  flex: 1;
+  text-align: left;
+}
+.top_left a{
+  color: #0078B6;
+  text-decoration: none;
+}
+.top_middle{
+  flex: 2;
+  text-align: center;
+}
+.top_right{
+  flex: 1;
+  text-align: right;
+}
+.login-middle {
+  width: 738px;
+  margin: 75px auto 80px;
+  position: relative;
+  background-color: #fff;
+}
+.login-r {
+  padding: 46px 114px 46px;
+}
+.login-im {
+  height: 100%;
+  width: 230px;
+  float: left;
+  background: #FF7700;
+  position: absolute;
+}
+.login-mian {
+   float: right;
+  width: 506px;
+  height: 100%;
+  margin-left: 230px;
+}
+.login-im img {
+   height: 100%;
+  margin-top: 10%;
+}
+
+.log-r-box {
+  text-align: center;
+}
+.log-r-box .log-r-t {
+  font-size: 24px;
+  color: #ff9c00;
+}
+.log-r-box .login-ha {
+  font-size: 14px;
+  line-height: 45px;
+}
+.log-r-box .login-ha a {
+  color: #ff9c00;
+}
+.login-t {
+  font-size: 20px;
+  line-height: 44px;
+  margin-bottom: 33px;
+}
+.login-t .login-active, .login-t .login-normal {
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  cursor: pointer;
+}
+.login-normal {
+  color: #444;
+}
+.login-t .login-active, .login-t .login-normal {
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  cursor: pointer;
+}
+.login-active {
+  color: #ff7700;
+  border-bottom: #ff7700 solid 4px;
+}
+.f-right {
+  float: right;
+}
+.login-star {
+  width: 280px;
+  margin: auto;
+}
+.log-step {
+  border: solid 1px #666666;
+  height: 44px;
+  line-height: 44px;
+}
+.log-input {
+  outline: 0;
+  border: none;
+  width: 225px;
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.i-user {
+  background: url(../../images/xinmeiti/lo_8.png) no-repeat center center;
+}
+
+.log-st-i {
+  width: 48px;
+  height: 24px;
+  display: inline-block;
+  text-align: center;
+  border-right: #666 solid 1px;
+  position: relative;
+  top: 7px;
+}
+
+.login-star {
+  width: 280px;
+  margin: auto;
+}
+.log-ybox {
+  width: 322px;
+  height: 199px;
+  background: #fff;
+  -webkit-box-shadow: 0 0 4px #aaa;
+  -moz-box-shadow: 0 0 4px #aaa;
+  box-shadow: 0 0 4px #aaa;
+  position: absolute;
+  margin-left: 295px;
+  text-align: center;
+  padding: 15px 49px;
+}
+.hide {
+  display: none!important;
+}
+.log-ybox .log-ybox-title {
+  color: #343434;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.log-ybox .login-text {
+  width: 127px;
+  height: 30px;
+  border: #b3b3b3 solid 1px;
+}
+input {
+  border-radius: 2px;
+}
+.in-ver {
+  width: 170px;
+  display: inline-block;
+}
+.log-step {
+  border: solid 1px #666666;
+  height: 44px;
+  line-height: 44px;
+}
+.in-ver .log-input {
+  width: 168px;
+}
+
+.log-input {
+  outline: 0;
+  border: none;
+  width: 225px;
+  padding: 0 12px;
+  font-size: 16px;
+}
+.img-ver1 {
+  height: 44px;
+  line-height: 44px;
+  width: 100px;
+  background: #fcfbfa;
+  text-align: center;
+  display: inline-block;
+  border: #e5e5e5 solid 1px;
+  float: right;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+.login-star {
+  width: 280px;
+  margin: auto;
+}
+.log-step {
+  border: solid 1px #666666;
+  height: 44px;
+  line-height: 44px;
+}
+.log-tip {
+  line-height: 30px;
+  font-size: 12px;
+  color: #807f7f;
+}
+.login-star {
+  width: 280px;
+  margin: auto;
+}
+.i-pwd {
+  background: url(../../images/xinmeiti/lo_4.png) no-repeat center;
+  background-position-x: 19px;
+}
+
+.log-st-i {
+  width: 48px;
+  height: 24px;
+  display: inline-block;
+  text-align: center;
+  border-right: #666 solid 1px;
+  position: relative;
+  top: 7px;
+}
+.log-input {
+  outline: 0;
+  border: none;
+  width: 225px;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 16px;
+}
+.login-Btn {
+  background: #ff7700;
+  width: 100%;
+  height: 42px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+}
+.login-t .login-active, .login-t .login-normal {
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  cursor: pointer;
+}
+.login-active {
+  color: #ff7700;
+  border-bottom: #ff7700 solid 4px;
+}
+.in-ver {
+  width: 170px;
+  display: inline-block;
+}
+.in-ver .log-input {
+  width: 168px;
+}
+
+.log-input {
+  outline: 0;
+  border: none;
+  width: 225px;
+  padding: 0 12px;
+  font-size: 16px;
+}
+.login-five {
+  line-height: 43px;
+  color: #666;
+  font-size: 14px;
+}
+.log-fon1 {
+  float: left;
+  margin-right: 6px;
+  padding-top: 2px;
+}
+.log-fon2 {
+  float: right;
+}
+.login-five a {
+  color: #444;
+}
+.login-m {
+  padding: 90px 114px 0;
+}

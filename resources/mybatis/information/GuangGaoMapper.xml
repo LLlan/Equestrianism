@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GuangGaoMapper">
+<select id="selectlistPage" parameterType="page" resultType="pd">
+	SELECT
+	tm.media_id,
+	tm.media_name,
+	tm.media_level,
+	tm.media_logo,
+	tm.rukouType,
+	tm.textLink_type,
+	tp.price
+FROM
+	tb_media tm
+LEFT JOIN tb_type_price tp ON tm.media_id = tp.f_id
+</select>
+<select id="getById" parameterType="pd" resultType="pd">
+	SELECT
+	tm.media_id,
+	tm.media_name,
+	tm.media_level,
+	tm.media_logo,
+	tm.rukouType,
+	tm.textLink_type,
+	tp.price
+FROM
+	tb_media tm
+LEFT JOIN tb_type_price tp ON tm.media_id = tp.f_id
+where tm.media_id=#{media_id}
+
+</select>
+
+<select id="getByid" parameterType="pd" resultType="pd">
+	SELECT
+	tm.media_id,
+	tm.media_name,
+	tm.media_level,
+	tm.media_logo,
+	tm.rukouType,
+	tm.textLink_type,
+	tp.price
+FROM
+	tb_media tm
+LEFT JOIN tb_type_price tp ON tm.media_id = tp.f_id
+where tm.media_id =#{media_id}
+</select>
+
+<insert id="saveGuangGaoOrder" parameterType="pd">
+	INSERT INTO tb_arimorder(
+	arimOrder_id,
+	arimOrder_title,
+	advertiser_id,
+	newsOrder_optime,
+	newsOrder_edtime,
+	order_time
+)
+VALUES
+	(
+		#{arimOrder_id},
+		#{arimOrder_title},
+		#{advertiser_id},
+		#{newsOrder_optime},
+		#{newsOrder_edtime},
+		#{order_time}
+	)
+</insert>
+
+
+<insert id="saveresource" parameterType="pd">
+	INSERT INTO tb_order_resource(
+		id,
+		order_number,
+		order_state,
+		resource_id,
+		resource_type
+	)values(
+		#{id},
+		#{order_number},
+		#{order_state},
+		#{resource_id},
+		#{resource_type}
+	)
+</insert>
+
+</mapper>

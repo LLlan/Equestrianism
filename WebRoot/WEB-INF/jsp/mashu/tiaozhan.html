@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta content="width=device-width, height=device-height,initial-scale=1.0,
+minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		  name="viewport">
+	<link href="css/mobiscroll.scroller.css" rel="stylesheet" />
+	<link href="css/mobiscroll.scroller.android-ics.css" rel="stylesheet" />
+	<script src="js/zepto.js"></script>
+	<script src="js/jquery-1.11.3.js"></script>
+	<script src="js/mobiscroll.zepto.js" type="text/javascript"></script>
+	<script src="js/mobiscroll.core.js" type="text/javascript"></script>
+	<script src="js/mobiscroll.scroller.js" type="text/javascript"></script>
+	<script src="js/mobiscroll.area.js"></script>
+	<script src="js/mobiscroll.scroller.android-ics.js"></script>
+	<script src="js/mobiscroll.i18n.zh.js"></script>
+	<script src="js/backstretch.min.js"></script>
+	<title>挑战</title>
+	<style>
+	/*	@media screen and (max-width:320px){.F2,.F3,.d4{font-size:13px}}
+		@media screen and (min-width:360px){.F2,.F3,.d4{font-size:18px}}
+		@media screen and (min-width:412px){.F2,.F3,.d4{font-size:18px}}
+		@media screen and (min-width:480px){.F2,.F3,.d4{font-size:21px}}
+		@media screen and (min-width:560px){.F2,.F3,.d4{font-size:24px}}*/
+		html,body {
+			margin:0;
+			padding:0;
+			/*height: 100%;
+			width: 100%;
+			background: url(images/yaoqing.jpg) no-repeat;
+			background-size: 100% 100%;*/
+		}
+		#content{
+			width: 75%;
+			height: auto;
+			text-align: center;
+			margin: 0 auto;
+			padding-top: 2em;
+		}
+		#content .d1{
+			width: 100%;
+			height: auto;
+			color: #D2A975;
+			font-size: 1.5em;
+			font-weight: bold;
+			margin-bottom: 1em;
+		}
+		/*#tioazhan{
+			position: relative;
+			height: 100%;
+			width: 100%;margin:0;
+			padding:0;
+			display: block;
+			background-image: url(images/yaoqing.jpg);
+			background-size: 100% 100%;
+		}*/
+		
+		.item {
+			padding-top: 9px;
+			height: 40px;
+			line-height: 40px;
+			margin-bottom: 5px;
+			/*position: relative;
+			z-index: 1;*/
+			/*margin-bottom: 20px;*/
+		}
+
+		.label {
+			float: left;
+			width: 26%;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			font-size: 15px;
+			color: #721822;
+			margin-right: 4%;
+			font-weight: bold;
+			background-color: #D2A975;
+
+		}
+
+		/*.input {
+			float: left;
+			position: relative;
+			width: 78%;
+			overflow: visible;
+		}
+*/
+		.text {
+			float: right;
+			width: 67%;
+			height: 35px;
+			line-height: 35px;
+			border: none;
+			background-color: #D2A975;
+		}
+		.item select{
+			width: 32%;
+			height: 40px;
+			line-height: 40px;
+			background-color: #D2A975;
+			font-size: 15px;
+			font-weight: bold;
+			color: #721822;
+			text-align: center;
+		}
+		.item #two{
+			float: right;
+			/*margin-right: 22px;*/
+		}
+		.btn-img {
+			width: 50%;
+			height: 30px;
+			line-height: 30px;
+			background-color: #D2A975;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			display: inline-block;
+			border: 0 none;
+			font-size: 15px;
+			font-weight: bold;
+			color: #721822;
+			text-align: center;
+			margin-top: 3%;
+		}
+		.d3{
+			width: 90%;
+			padding:0 5%;
+			border: 1px solid #914841;
+			margin-top: 15px;
+			text-align: left;
+		}
+		.d3 .F1{
+			color: #DBB788;
+			font-size: 1.2em;
+			font-weight: bold;
+			margin: 1px 0;
+			text-align: center;
+			letter-spacing: 2px;
+		}
+		.d3 .F2,.F3{
+			color: #CC9E76;
+			margin: 3px 0;
+		}
+		.d4{
+			color: #DBB788;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+<div id="content">
+	<div class="d1">敢不敢来向驯服小马，发起挑战？</div>
+	<!--form表单-->
+	<div id="tioazhan">
+		<form action="">
+			<div class="items">
+				<div class="item">
+					<span class="label">姓名</span>
+					<div class="input">
+						<input type="text" id="username" name="username" class="text">
+					</div>
+				</div>
+				<div class="item">
+					<span class="label">电话号码</span>
+					<div class="input">
+						<input type="text" id="phone" name="phone" class="text">
+					</div>
+				</div>
+				<div class="item">
+					<span class="label">所在地区</span>
+					<!--<select  name="province" id="province">
+						<option value="省份" selected="selected">省份</option>
+
+					</select>
+					<select  name="city" id="city">
+						<option value="城市" selected="selected">城市</option>
+					</select>-->
+					<input style="color: red;" class="text" id="area" placeholder="请选择所在地区" areaid="10064 10043 10375">
+				</div>
+				<div class="item">
+					<input type="submit" class="btn-img" id="registsubmit" value="立即提交" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<!--活动说明-->
+	<div class="d3">
+		<p class="F1">活动说明</p>
+		<p class="F2">1.线下活动时间：2017年7月(具体时间在通知)活动地点：东莞市长安镇金伯乐马术学府</p>
+		<p class="F3">2.将从报名成功的粉丝中抽选20名，参与以纯暑期马术体验日活动；还有机会获赠以纯金伯乐马术大赛赛事限量公仔哦！机会均等，邀约体验吧</p>
+	</div>
+	<div class="d4">了解以纯金伯乐国际马术大奖赛</div>
+</div>
+<script>
+	$(function(){
+		$("#registsubmit").click(function(){
+			console.log($("#area").val())
+			alert($("#area").val())
+
+
+		})
+	})
+	var valo = $("#area").attr("areaid");
+	$('#area').scroller('destroy').scroller({ preset: 'area', theme: 'android-ics light', display: 'bottom',valueo:valo });
+
+$(function(){
+	$.backstretch("images/yaoqing.jpg");
+})
+</script>
+</body>
+</html>

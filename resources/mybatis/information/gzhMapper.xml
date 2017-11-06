@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gzhMapper">
+	<!-- 添加资源信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into tb_source_wcpublic(
+			WCpublic_id,
+			account,
+			fansNumImgURL,
+			f_id,
+			checkedState,
+			sourceState
+		)values(
+			#{WCpublic_id},
+			#{account},
+			#{fansNumImgURL},
+			#{f_id},
+			#{checkedState},
+			#{sourceState}
+		)
+	</insert>
+	
+	<!-- 
+		查询所有的信息（前台页面展示，以供别人查看） 
+	-->
+	<select id="getlistAll" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.city
+		from tb_source_wcpublic tsw
+		
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		  
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCpublic_id
+		<where>
+			tsw.checkedState='1'
+			and tsw.sourceState='1'
+			<if test="minFansNum != null and maxFansNum != null">
+				and tbi.fansNum &gt;= #{minFansNum} and tbi.fansNum &lt;= #{maxFansNum}
+			</if>
+			<if test="minFansNum == null and maxFansNum !=null">
+				and tbi.fansNum &gt; #{maxFansNum}
+			</if>
+			<if test="minPrice !=null and maxPrice !=null">
+				and ttp.price BETWEEN #{minPrice} and #{maxPrice}
+			</if>
+			<if test="minPrice == null and maxPrice !=null">
+				and ttp.price &gt; #{maxPrice}
+			</if>
+			<if test="area != null">
+				and (tbi.city LIKE CONCAT(CONCAT('%', #{area}),'%') or tbi.province LIKE CONCAT(CONCAT('%', #{area}),'%'))
+			</if>
+		</where>
+		group by tsw.WCpublic_id
+		 
+	</select>
+	
+	
+	<!-- 
+		媒介主资源管理列表
+	 -->
+	<select id="getsourcelistbyfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			tsw.WCpublic_id,
+			tsw.checkedState,
+			tsw.sourceState,
+			tsw.account,
+			tbi.headImgURL,
+			tbi.`name`,
+			tbi.fansNum,
+			tb_temp.prices,
+			tb_temp.`names`
+		from tb_source_wcpublic tsw 
+		LEFT JOIN tb_advertiser tad ON tad.advertiser_id=tsw.f_id
+		left join (
+	
+			select GROUP_CONCAT(tb2.price)prices,GROUP_CONCAT(tb2.`name`)`names`,tb2.f_id from 
+				(
+					select ttp.f_id,ttp.`name`,ttp.price from tb_type_price ttp 
+					WHERE
+						ttp.f_id IN (
+								SELECT tsw.WCpublic_id  FROM tb_source_wcpublic tsw WHERE tsw.f_id=#{f_id}
+							)
+				)tb2
+				GROUP BY tb2.f_id
+		)tb_temp on tb_temp.f_id = tsw.WCpublic_id
+		LEFT JOIN tb_base_information tbi  ON tbi.f_id=tsw.WCpublic_id
+		where tad.advertiser_id=#{f_id}
+	</select>
+	
+	<!-- 
+		
+		根据媒介主的id查询其发布的所有微信公众号的资源查信息 
+	
+	-->
+	<select id="getlistAllbyfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			tsw.WCpublic_id,
+			tsw.checkedState,
+			tsw.sourceState,
+			tsw.account,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.fansNum
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		where
+		  tsw.f_id=#{f_id}
+		  <if test="checkedState!='' and checkedState!=null">
+		  	and tsw.checkedState=#{checkedState}
+		  </if>
+		  <if test="sourceState!='' and sourceState!=null">
+		  	and tsw.sourceState=#{sourceState}
+		  </if>
+		order by tbi.time desc
+	</select>
+	<!-- 根据ID查询指定信息 -->
+	<select id="getById" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tsw.fansNumImgURL,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		where 	
+		  tsw.WCpublic_id=#{tag_id}	
+	</select>
+	<!-- 根据ID和name查询指定信息 -->
+	<select id="getByIdandname" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tsw.fansNumImgURL,
+			tbi.name,
+			tbi.introduce,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp  ON tsw.WCpublic_id=ttp.f_id
+		where 	
+		  tsw.WCpublic_id=#{tag_id}	 and ttp.name=#{name}
+	</select>
+	<!-- 
+		订单页中的添加资源中的资源信息列表
+	 
+	 <select id="orderaddrespurce" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCpublic_id
+		where 
+			tsw.checkedState='1'
+			and tsw.sourceState='1'	
+		    and tsw.WCpublic_id!=#{tag_id} and ttp.name=#{name}
+	</select>
+	-->
+			
+	<!-- 更新指定的信息 -->
+	<update id="update" parameterType="pd">
+		update tb_source_wcpublic
+			set
+				account=#{account},
+				fansNumImgURL=#{fansNumImgURL},
+				checkedState=#{checkedState},
+				sourceState=#{sourceState}
+			where WCpublic_id=#{WCpublic_id}
+	</update>		
+	<!-- 更新资源的状态（更改为启用） -->
+	<update id="changeStatetoYes" parameterType="pd">
+		update tb_source_wcpublic
+			set
+				sourceState="1"
+		where WCpublic_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 更新资源的状态（更改为下架） -->
+	<update id="changeStatetoNo" parameterType="pd">
+		update tb_source_wcpublic
+			set
+				sourceState="0"
+		where WCpublic_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!--======================================================================================== -->	
+	<!--============================订单部分功能============================================================ -->	
+	<!-- 
+		由详情进入订单页
+	 -->
+	 <select id="detailgotoorder" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL,
+			ttp.price,
+			ttp.name as name1
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		  LEFT JOIN tb_type_price ttp ON ttp.f_id = tsw.WCpublic_id
+		where 	
+		  tsw.WCpublic_id=#{tag_id}	and ttp.name=#{name}
+	</select>
+	<!--  
+		创建订单页面中的点击添加资源
+	-->
+	<select id="getOrderAddResourceList" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		where
+		  tsw.checkedState='1'
+		  and tsw.sourceState='1'
+		  and tsw.WCpublic_id not in
+		  <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!--  
+		创建订单时的添加资源中的资源选择
+	-->
+	<select id="getresourcelist" parameterType="pd" resultType="pd">
+		select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tbi.name,
+			tbi.fansNum,
+			tbi.province,
+			tbi.city,
+			tbi.headImgURL
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+		where
+		  tsw.WCpublic_id in
+		  <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- 添加订单信息 -->
+	<insert id="insertOrder" parameterType="pd">
+		insert into tb_order_wcpublic(
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			article_import,
+			article_title,
+			author,
+			cover_imgURL,
+			text_content,
+			text_http,
+			remarks,
+			proveURL,
+			order_number,
+			f_id
+		)values(
+			#{id},
+			#{type_name},
+			#{name},
+			#{beginTime},
+			#{order_time},
+			#{article_import},
+			#{article_title},
+			#{author},
+			#{cover_imgURL},
+			#{text_content},
+			#{text_http},
+			#{remarks},
+			#{proveURL},
+			#{order_number},
+			#{f_id}
+		)
+	</insert>
+	<!-- 查询订单列表 
+	<select id="getOrderlist" parameterType="pd" resultType="pd">
+		select 
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			order_number
+		from tb_order_wcpublic
+		where 
+			f_id=#{f_id}
+		order by order_time desc
+	</select>-->
+	<!-- 根据订单号去查询订单信息 
+	<select id="getlistByorder_number" parameterType="pd" resultType="pd">
+		select 
+			id,
+			type_name,
+			name,
+			beginTime,
+			order_time,
+			order_number
+		from tb_order_wcpublic
+		where 
+			order_number=#{order_number}
+		order by order_time desc
+	</select>-->
+	<!-- 广告主查询订单信息 -->
+	<select id="getOrderInformationList" parameterType="pd" resultType="pd">
+		SELECT
+			tow.order_number,
+			tow.order_time,
+			tow.`name`,
+			tow.type_name,
+			tbi.`name` resource_name,
+			tsw.account,
+			ttp.price,
+			tow.beginTime,
+			tor.order_state
+		FROM tb_order_wcpublic tow
+		LEFT JOIN tb_order_resource tor ON tor.order_number=tow.order_number
+		LEFT JOIN tb_source_wcpublic tsw ON tor.resource_id=tsw.WCpublic_id
+		LEFT JOIN tb_type_price ttp ON tor.resource_id=ttp.f_id
+		LEFT JOIN tb_base_information tbi ON tor.resource_id=tbi.f_id
+		WHERE 
+			tow.f_id=#{f_id} AND ttp.`name`=tow.type_name
+			<if test="order_state!='' and order_state!=null">
+			AND tor.order_state=#{order_state}
+			</if>
+			<if test="order_name!='' and order_name!=null">
+			AND tow.`name`=#{order_name}
+			</if>
+			<if test="order_number!='' and order_number!=null">
+			AND tow.order_number=#{order_number}
+			</if>
+		ORDER BY tow.order_time DESC
+	</select>
+	<!-- 媒介主查询订单列表信息 -->
+	<select id="getMjzOrderInformationList" parameterType="pd" resultType="pd" useCache="false">
+		SELECT
+			top.order_number,
+			top.order_time,
+			top.`name` order_name,
+			top.type_name,
+			typ.`name` source_name,
+			typ.account,
+			top.beginTime,
+			typ.mjzorder_state
+		FROM
+			tb_order_wcpublic top
+		LEFT JOIN (
+			SELECT
+				tti.account,
+				tti.`name`,
+				tti.f_id,
+				tos.order_number,
+				tos.mjzorder_state,
+				tos.resource_type
+			FROM
+				tb_order_resource tos
+			LEFT JOIN (
+				SELECT
+					tsp.WCpublic_id,
+					tsp.account,
+					tbi.`name`,
+					tsp.f_id
+				FROM
+					tb_source_wcpublic tsp
+				LEFT JOIN tb_base_information tbi ON tbi.f_id = tsp.WCpublic_id
+			) tti ON tos.resource_id = tti.WCpublic_id
+			
+		) typ ON top.order_number=typ.order_number
+		WHERE
+				typ.resource_type = '1' AND typ.f_id = #{f_id}
+		ORDER BY top.order_time DESC
+	</select>
+<!--============================后台服务号功能============================================================ -->	
+	
+	<!-- 
+		查询所有的信息(后台系统设置页面展示)
+	 -->
+	 <select id="sysgetlistPage" parameterType="page" resultType="pd" useCache="false">
+		 select 
+			tsw.WCpublic_id,
+			tsw.account,
+			tsw.checkedState,
+			tsw.fansNumImgURL,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.fansNum,
+			tbi.time
+		from tb_source_wcpublic tsw
+		  LEFT JOIN tb_base_information tbi  ON tsw.WCpublic_id=tbi.f_id
+	    <where>
+		 	<if test="pd.searchName!=null and pd.searchName!=''">
+		 		tbi.name LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%') 
+		 		or tsw.account LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%')
+		 	</if>
+		 	<if test="pd.selectName!=null and pd.selectName!=''">
+		 		and tsw.checkedState=#{pd.selectName}
+		 	</if>
+	    </where>
+		order by tbi.time desc  
+	</select>
+	<!-- 
+		系统审核功能之审核不通过
+	 -->
+	 <update id="syscheckedNo" parameterType="pd">
+		update tb_source_wcpublic
+			set
+				checkedState=#{checkedState}
+			where WCpublic_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之审核通过
+	 -->
+	 <update id="syscheckedYes" parameterType="pd">
+		update tb_source_wcpublic
+			set
+				checkedState=#{checkedState},
+				sourceState=#{sourceState}
+			where WCpublic_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之批量审核不通过
+	 -->
+	 <update id="syscheckedNoAll" parameterType="pd">
+		update tb_source_wcpublic
+			set
+				checkedState="0"
+			where WCpublic_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 
+		系统审核功能之批量审核通过
+	 -->
+	 <update id="syscheckedYesAll" parameterType="pd">
+		update tb_source_wcpublic
+			set
+				checkedState="1",
+				sourceState="1"
+			where WCpublic_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="anchorMapper">
+
+ <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> 
+ <!-- 直播订单列表 -->
+ 	<select id="anchorlistPage" parameterType="page" resultType="pd">
+		select 
+			anchorOrder_id,
+			anchorOrder_title,
+			anchorOrder_content,
+			anchorOrder_location,
+			specfrom_id,
+			live_id,
+			advertiser_id
+		from tb_anchorOrder
+
+	</select>
+ 
+ 
+ <!-- 保存订单 -->
+ 	<insert id="saveAnchor" parameterType="pd">
+		insert into tb_anchorOrder(
+				anchorOrder_id,
+				anchorOrder_title,
+				anchorOrder_content,
+				anchorOrder_location,
+				specfrom_id,
+				live_id,
+				advertiser_id
+		)
+			values(
+				#{anchorOrder_id},
+				#{anchorOrder_title},
+				#{anchorOrder_content},
+				#{anchorOrder_location},
+				#{specfrom_id},
+				#{live_id},
+				#{advertiser_id}
+			)
+			
+	</insert>
+ 
+ <!-- 修改直播订单 -->
+ 	<update id="updateAnchor" parameterType="pd">
+			update
+				tb_anchorOrder
+			set
+				
+				anchorOrder_title = #{anchorOrder_title},
+				anchorOrder_content = #{anchorOrder_content},
+				anchorOrder_location = #{anchorOrder_location},
+				specfrom_id = #{specfrom_id},
+				live_id = #{live_id},
+				advertiser_id = #{advertiser_id}
+				
+			where anchorOrder_id = #{anchorOrder_id}
+	</update>
+ 
+ 
+ <!-- 删除直播订单 -->
+ 	<!-- 刪除新&网信息 -->
+ 	<delete id="delAnchor" parameterType="pd">
+		delete from tb_anchorOrder
+		where anchorOrder_id = #{anchorOrder_id}
+			
+	</delete>
+ 
+ <!-- ID查找直播订单 -->
+ 	<select id="getDetailByID" parameterType="pd">
+		select 
+				anchorOrder_title,
+				anchorOrder_content,
+				anchorOrder_location,
+				specfrom_id,
+				live_id,
+				advertiser_id
+		from tb_anchorOrder
+		where anchorOrder_id = #{anchorOrder_id}
+			
+	</select>
+ 
+ 
+ 
+ 
+ 
+ </mapper>

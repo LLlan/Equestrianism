@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adverMapper">
+<!-- 虽然新闻添加和广告招商是同一张表，但是因为有resourceType字段区别，所以建立这个mapper，把查询广告招商的SQL放进来。 -->
+
+<!-- 广告主方向的广告招商资源列表 -->
+	<select id="adverlistPage" parameterType="page" resultType="pd">
+		SELECT 
+			tm.media_id,
+			tm.media_name,
+			tm.channelName,
+			tm.resourceName,
+			tm.media_logo,
+			tm.media_level,
+			tm.linkeHttp,
+			tm.linkeHttp_img,
+			tm.resourceType,
+			tm.rukouType,
+			tm.textLink_type,
+			tm.baidu_resource,
+			tm.sourceState,
+			tm.checkedState,
+			tm.media_intro,
+			ttp.id,
+			ttp.price
+		FROM tb_media tm
+		LEFT JOIN tb_type_price ttp ON tm.media_id=ttp.f_id
+		WHERE tm.sourceState='1' AND tm.checkedState='1' AND tm.resourceType='1'
+	</select>
+	
+	
+	<!-- 广告招商列表(媒体主方向) -->
+	<select id="adverlistPageU" parameterType="page" resultType="pd">
+	SELECT 
+		tm.media_id,
+		tm.media_name,
+		tm.channelName,
+		tm.resourceName,
+		tm.media_logo,
+		tm.media_level,
+		tm.linkeHttp,
+		tm.linkeHttp_img,
+		tm.resourceType,
+		tm.rukouType,
+		tm.textLink_type,
+		tm.baidu_resource,
+		tm.sourceState,
+		tm.checkedState,
+		tm.media_intro,
+		ttp.id,
+		ttp.price,
+		tao.source_type,
+		tao.source_size,
+		tao.file_size,
+		tao.word_size
+		FROM tb_media tm
+		LEFT JOIN tb_type_price ttp  on tm.media_id=ttp.f_id
+		LEFT JOIN tb_advertise_otherinfor tao on tm.media_id=tao.media_id
+		<!-- where tm.resourceType='1' AND tm.mediaOwner_id=#{mediaOwner_id} -->
+		where tm.resourceType='1'
+	</select>
+	
+	
+	<!-- 为广告招商模块写的根据ID查询，用到了关联表查询 -->
+ 	<select id="getDataByAdv" parameterType="pd" resultType="pd">
+ 		SELECT 
+ 			tm.media_id,
+			tm.media_name,
+			tm.channelName,
+			tm.resourceName,
+			tm.media_logo,
+			tm.media_level,
+			tm.linkeHttp,
+			tm.linkeHttp_img,
+			tm.resourceType,
+			tm.rukouType,
+			tm.textLink_type,
+			tm.baidu_resource,
+			tm.sourceState,
+			tm.checkedState,
+			tm.media_intro,
+			ttp.id,
+			ttp.price
+		from tb_media tm
+		LEFT JOIN tb_type_price ttp ON tm.media_id=ttp.f_id
+		WHERE tm.media_id=#{media_id}
+ 	</select>
+ 	
+ 	<!-- 媒介主上架广告招商资源 -->
+ 	<update id="updateSourcA" parameterType="pd">
+ 		UPDATE 
+		tb_media tm
+		SET
+		tm.sourceState='1'
+		WHERE tm.media_id=#{media_id} AND tm.resourceType='1'
+ 	</update>
+ 	<!-- 媒介主下架广告招商资源 -->
+ 	<update id="updateSourcB" parameterType="pd">
+ 		UPDATE 
+		tb_media tm
+		SET
+		tm.sourceState='0'
+		WHERE tm.media_id=#{media_id} AND tm.resourceType='1'
+ 	</update>
+</mapper>

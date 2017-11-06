@@ -1,0 +1,115 @@
+
+.col-flex-0{
+	-webkit-box-flex: 0;
+	-webkit-flex: 0;
+	flex: 0;
+}
+.col-flex-1{
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+}
+.col-flex-2{
+	-webkit-box-flex: 2;
+	-webkit-flex: 2;
+	flex: 2;
+}
+.col-flex-3{
+	-webkit-box-flex: 3;
+	-webkit-flex: 3;
+	flex: 3;
+
+}
+.col-flex-4{
+	-webkit-box-flex: 4;
+	-webkit-flex: 4;
+	flex: 4;
+}
+.col-flex-5{
+	-webkit-box-flex: 5;
+	-webkit-flex: 5;
+	flex: 5;
+}
+img{
+	max-width:100%;
+}
+html,body{
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+.container{
+	background:url(../../images/mashu/yaoqing.jpg) no-repeat;
+	background-size:100% 100%;
+	display: block;
+	width:100%;
+	height:100%;
+}
+.myCanvas{
+	justify-content: center;
+	width:80%;
+	height:87%;
+	margin:auto;
+	position: relative;
+	top: 6%;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+}
+.myCanvas .title p{
+	text-align: center;
+	color: #D8B486;
+	font-size: 1.2em;
+}
+.myCanvas .title>ul{
+	display: -webkit-flex;
+	display: flex;
+	text-align:center;
+}
+.myCanvas .title>ul h3{
+	color: #D8B486;
+}
+.middle{
+	width: 100%;
+	color: #CA9E6D;
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+
+
+	padding-bottom: 1em;
+	letter-spacing: 0.25em;
+	border-bottom:1px solid #CA9E6D;
+}
+.footer{
+	width: 100%;
+	height: auto;
+	margin-top: 1em;
+	text-align: center;
+}
+.footer .f1{
+	width: 100%;
+	margin-bottom: 30px;
+	font-size:1.5em;
+	font-weight: bold;
+	color: #CA9E6D;
+	letter-spacing: 3px;
+}
+.footer .f1 span{
+	font-size: 2em;
+}
+.footer .f2, .f3,.f4{
+	width: 100%;
+	line-height: 40px;
+	font-size:1.4em;
+	font-weight: bold;
+	color: #5F0D1A;
+	margin-bottom: 10px;
+	background-color: #CA9E6D;
+}
+.footer .f4{
+	width: 100%;
+	height: auto;
+}

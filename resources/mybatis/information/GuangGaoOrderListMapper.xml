@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GuangGaoOrderListMapper">
+<select id="getguangGaoOrderlistpage" parameterType="page" resultType="pd">
+			SELECT
+	arimOrder_id,
+	arimOrder_title,
+	media_name,
+	price,
+	newsOrder_optime,
+	order_state
+FROM
+	tb_arimorder ta
+LEFT JOIN tb_order_resource tor ON tor.order_number=ta.arimOrder_id
+LEFT JOIN tb_media tm1 ON tor.resource_id=tm1.media_id
+LEFT JOIN tb_type_price tp ON tm1.media_id=tp.f_id
+
+		WHERE 1=1
+		<if test="pd.arimOrder_title!=null and pd.arimOrder_title!=''">
+		and arimOrder_title LIKE CONCAT('%','${pd.arimOrder_title}','%')
+		</if> 
+		<if test="pd.arimOrder_id!=null and pd.arimOrder_id!=''">
+		and arimOrder_id LIKE CONCAT('%','${pd.arimOrder_id}','%')
+		</if> 
+		<if test="pd.order_state!=null and pd.order_state!=''">
+		and order_state=#{pd.order_state}
+		</if>
+		<if test="pd.advertiser_id!=null and pd.advertiser_id!=''">
+		and ta.advertiser_id=#{pd.advertiser_id}
+		</if>
+</select> 
+<select id="getxinWenOrderlistpage" parameterType="page" resultType="pd">
+		SELECT
+		newsOrder_id,
+		newsOrder_title,
+		media_name,
+		price,
+		newsOrder_optime,
+		order_state
+	FROM
+		tb_newsorder tn
+		LEFT JOIN tb_order_resource tor ON tor.order_number=tn.newsOrder_id
+		LEFT JOIN tb_media tm1 ON tor.resource_id=tm1.media_id
+		LEFT JOIN tb_type_price tp ON tm1.media_id=tp.f_id
+		WHERE 1=1
+		<if test="pd.newsOrder_title!=null and pd.newsOrder_title!=''">
+		and newsOrder_title LIKE CONCAT('%','${pd.newsOrder_title}','%')
+		</if> 
+		<if test="pd.newsOrder_id!=null and pd.newsOrder_id!=''">
+		and newsOrder_id LIKE CONCAT('%','${pd.newsOrder_id}','%')
+		</if>
+		<if test="pd.order_state!=null and pd.order_state!=''">
+		and order_state=#{pd.order_state}
+		</if>
+		<if test="pd.advertiser_id!=null and pd.advertiser_id!=''">
+		and tn.advertiser_id=#{pd.advertiser_id}
+		</if>
+</select>
+<select id="zhiboselectlistpage" parameterType="page" resultType="pd">
+SELECT
+	anchorOrder_id,
+	anchorOrder_title,
+	platformName,
+	price,
+	newsOrder_optime,
+	order_state
+FROM
+	tb_anchororder ta
+LEFT JOIN tb_order_resource tr ON ta.anchorOrder_id = tr.order_number
+LEFT JOIN tb_video_platform tv ON tr.resource_id = tv.videoPlatform_id
+LEFT JOIN tb_type_price tt ON tt.f_id = tv.videoPlatform_id
+WHERE tt.name= ta.type_name
+		<if test="pd.anchorOrder_title!=null and pd.anchorOrder_title!=''">
+		and ta.anchorOrder_title LIKE CONCAT('%','${pd.anchorOrder_title}','%')
+		</if> 
+		<if test="pd.anchorOrder_id!=null and pd.anchorOrder_id!=''">
+		and ta.anchorOrder_id LIKE CONCAT('%','${pd.anchorOrder_id}','%')
+		</if>
+		<if test="pd.order_state!=null and pd.order_state!=''">
+		and order_state=#{pd.order_state}
+		</if>
+		<if test="pd.advertiser_id!=null and pd.advertiser_id!=''">
+		and ta.advertiser_id=#{pd.advertiser_id}
+		</if>
+</select>
+</mapper>

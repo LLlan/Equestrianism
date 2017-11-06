@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="jsAddress.js"></script>
+    <title>纯JS省市区联动</title>
+</head>
+<body>
+<div>
+    <select id="cmbProvince">省份</select>
+    <select id="cmbCity">城市</select>
+    <select id="cmbArea">区</select>
+    <br /><br />
+    省：<select id="Select1"></select>
+    市：<select id="Select2"></select>
+    区：<select id="Select3"></select>
+    <script type="text/javascript">
+        addressInit('cmbProvince', 'cmbCity', 'cmbArea', '陕西', '宝鸡市', '金台区');
+        addressInit('Select1', 'Select2', 'Select3');
+    </script>
+</div>
+</body>
+</html>

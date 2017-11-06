@@ -1,0 +1,36 @@
+$(function(){
+    $(".sidbar .all").mouseover(function(){
+        $(".index_sidbar").show();
+    }).mouseout(function(){
+        $(".index_sidbar").hide()
+    });
+    $(".index_sidbar").mouseover(function(){
+        $(".index_sidbar").show();
+    }).mouseout(function(){
+        $(".index_sidbar").hide()
+    });
+    $(".form-con1").click(function(){
+        $(".form-con1").attr("checked","checked");
+        $(".exter_link").show();
+        $(".form-con2").attr("checked",false);
+        $(".upload_file").hide();
+        $(".form-con3").attr("checked",false);
+        $(".upload_video").hide();
+    });
+    $(".form-con2").click(function(){
+        $(".form-con2").attr("checked","checked");
+        $(".upload_file").show();
+        $(".form-con1").attr("checked",false);
+        $(".exter_link").hide();
+        $(".form-con3").attr("checked",false);
+        $(".upload_video").hide();
+    });
+    $(".form-con3").click(function(){
+        $(".form-con3").attr("checked","checked");
+        $(".upload_video").show();
+        $(".form-con1").attr("checked",false);
+        $(".exter_link").hide();
+        $(".form-con2").attr("checked",false);
+        $(".upload_file").hide();
+    })
+});

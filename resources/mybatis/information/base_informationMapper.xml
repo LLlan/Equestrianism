@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="base_informationMapper">
+	<!-- 添加信息 -->
+	<insert id="insert" parameterType="pd">
+		insert into tb_base_information(
+			base_information_id,
+			headImgURL,
+			fansNum,
+			name,
+			province,
+			city,
+			introduce,
+			f_id,
+			time
+		)values(
+			#{base_information_id},
+			#{headImgURL},
+			#{fansNum},
+			#{name},
+			#{province},
+			#{city},
+			#{introduce},
+			#{f_id},
+			#{time}
+		)
+	</insert>
+	<!-- 列表一页的信息 -->
+	<!-- <select id="getlistPage" parameterType="page" resultType="pd" useCache="false">
+		SELECT 
+			sch.id,
+			sch.name,
+			swe.name as name1
+		FROM sys_channel sch 
+		LEFT JOIN sys_website swe
+		ON sch.website_id = swe.website_id
+		<where>
+		 	<if test="pd.searchName!=null and pd.searchName!=''">
+		 		sch.name LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%')
+		 	</if>
+		 </where>
+	</select> -->
+	<!-- 查询所有的信息 -->
+	<!-- <select id="getlistAll" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			*
+		 from tb_base_information
+	</select> -->
+	<!-- 根据外键查询指定信息 -->
+	<select id="getByfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			*
+		 from tb_base_information
+		 where f_id=#{tag_id}
+	</select>
+	
+	<!-- 根据ID查询指定信息 -->
+	<!-- <select id="getById" parameterType="pd" resultType="pd">
+		select
+			*
+		from sys_channel 
+			where id=#{id}
+	</select> -->
+	
+	<!-- 根据 name和外键查询，判断是否已经存在-->
+	<!-- <select id="getByNameAndfid" parameterType="pd" resultType="pd">
+		select
+			*
+		from sys_channel 
+			where name=#{name} and website_id=#{website_id} 
+	</select> -->
+	
+	
+	<!-- 更新指定的信息 -->
+	<update id="update" parameterType="pd">
+		update tb_base_information
+			set
+				headImgURL=#{headImgURL},
+				fansNum=#{fansNum},
+				name=#{name},
+				province=#{province},
+				city=#{city},
+				introduce=#{introduce}
+			<!--原本为 where f_id=#{f_id} -->
+			where base_information_id=#{base_information_id}
+	</update>
+	<!-- 删除指定的信息 -->
+	<!-- <delete id="delete" parameterType="pd">
+		delete from sys_channel where id=#{id}
+	</delete> -->
+	<!-- 批量删除信息 -->
+	<!-- <delete id="deleteAll" parameterType="String" flushCache="false">
+		delete from sys_channel
+		where
+			id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</delete> -->
+	
+	<insert id="savebase" parameterType="pd">
+		insert into tb_base_information(
+			base_information_id,
+			headImgURL,
+			fansNum,
+			name,
+			province,
+			city,
+			introduce,
+			f_id,
+			time
+		)values(
+			#{base_information_id},
+			#{headImgURL},
+			#{fansNum},
+			#{name},
+			#{province},
+			#{city},
+			#{introduce},
+			#{videoPlatform_id},
+			#{time}
+		)
+	</insert>
+	
+</mapper>

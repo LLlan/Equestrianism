@@ -1,0 +1,476 @@
+/******************����*****************/
+.top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 888;
+  font-size: 12px;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+
+  background-color: #ECECEC;
+}
+.middle{
+  display: flex;
+  width:1160px;
+  margin: 0 auto;
+}
+
+.top_left{
+  flex: 1;
+  text-align: left;
+}
+.top_middle{
+  flex: 2;
+  text-align: center;
+}
+.top_right{
+  flex: 1;
+  text-align: left;
+}
+/*logo��־*/
+.log{
+  margin-top: 50px;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+}
+.l_logo{
+  width: 220px;
+  margin-top: 20px;
+  text-align: left;
+}
+.l_adv{
+  width: 640px;
+  line-height: 86px;
+  border: 1px solid blue;
+  text-align: center;
+}
+.l_list{
+  flex: 1;
+  padding-top: 25px;
+}
+.l_list .l_list1{
+  display: inline-block;
+  background: url(../../images/xinmeiti/hot.png) no-repeat right center;
+  background-size: 35%;
+  border: 1px solid #F4782F;
+  height: 30px;
+  line-height: 30px;
+  width: 47%;
+  margin-right: 4%;
+  align-items: center;
+  padding-right: 44px;
+}
+.l_list .l_list2{
+  display: inline-block;
+  background: url(../../images/xinmeiti/hot.png) no-repeat right center;
+  border: 1px solid #F4782F;
+  height: 30px;
+  line-height: 30px;
+  width: 47%;
+  padding-right: 44px;
+}
+.middle a{
+  cursor: pointer;
+  color: #F4782F;
+  font-size: 14px;
+  text-decoration: none;
+}
+/*ȫ���������*/
+.seem{
+  position: absolute;
+  z-index: 100;
+  width: 1160px;
+  left: 50%;
+  margin-left: -580px;
+}
+.sidbar{
+  width: 220px;
+  background: #e61717;
+}
+.all{
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+.all b{
+  color: #fff;
+}
+.sidbar .all a{
+  display: block;
+  color: #fff;
+  font-size: 14px;
+}
+.arrows{
+  display: inline-block;
+  width:15px;
+  height:12px;
+  background: url(../../images/xinmeiti/arrow_main.png) no-repeat 0 -320px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.index_sidbar{
+  background:#3d404d;
+  padding:0;
+  width:220px;
+  border:none
+}
+.index_sidbar ul{
+  height:550px
+}
+.index_sidbar li{
+  padding:0;
+  width: 100%;
+  height: 91.6666px;
+
+}.index_sidbar li div.title{
+   height:30px;
+   width:180px;
+   background:url(../../images/xinmeiti/nav-x.jpg) repeat-x 0 20px;
+   margin:0 auto;
+   padding-top:5px;
+   text-align:center;
+ }
+.index_sidbar li div.title>span {
+  height: 30px;
+  display: inline-block;
+  max-width: 120px;
+  min-width: 50px;
+  padding: 5px 15px;
+  color: #ff4c4c;
+  background: #3d404d;
+  margin: 0 auto;
+}
+.index_sidbar li .bar_pad{
+
+  line-height: 55px;
+  text-align: center;
+  padding:0;
+  border:none;
+  background:#3d404d;
+  margin-top: 5px;
+}
+.index_sidbar li .bar_pad>span>a{
+  display: block;
+  color: #fff;
+  font-size: 18px;
+}
+.myscroll {
+  height: 20px;
+  margin: 0 auto;
+  line-height: 20px;
+  font-size: 12px;
+  overflow: hidden;
+}
+.navmain{
+  width:640px;
+  height:40px;
+  line-height:50px;
+  margin-top: 5px;
+  padding-left:10px;
+  font-family:"΢���ź�";
+}
+.navmain ul{
+  float: left;
+}
+.navmain ul li{
+  padding: 0 30px 0 10px;
+}
+.navmain ul li a{
+  cursor: pointer;
+  text-decoration: none;
+  font-size:16px;
+  font-weight: 700;
+}
+/*������*/
+.search{
+  width: 298px;
+  height: 31px;
+  margin-top: 10px;
+  border: 1px solid #ff9604;
+}
+.input{
+  float: left;
+  margin-left: 4px;
+  margin-top: 2px;
+}
+.s_ser{
+  float: left;
+  width: 250px;
+  height: 26px;
+  line-height: 26px;
+  padding-left: 10px;
+  border: none;
+  background: #fff;
+}
+.sear{
+  width: 30px;
+  height: 30px;
+  float: left;
+  background: url(../../images/xinmeiti/h_16.png) no-repeat;
+  cursor: pointer;
+  margin-left: 12px;
+  margin-top: -2px;
+}
+.onx{
+  color: #F9A973;
+}
+/*����*/
+.The_stage{
+  width: 1160px;
+  margin: 70px auto 10px auto;
+}
+.n_position{
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  color: #666;
+  background-color: #ddd;
+}
+.col_lf{
+  float: left;
+  width: 850px;
+  overflow: hidden;
+}
+.module_badic_all{
+  float: left;
+  width: 850px;
+  height: 350px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  margin: 10px 0;
+}
+.head_portrait{
+  width: 180px;
+  float: left;
+  margin: 30px 0 0 10px;
+}
+.head_portrait p {
+  display: table-cell;
+  width: 170px;
+  height: 160px;
+  border: 1px solid #e5e5e5;
+  text-align: center;
+
+}
+.head_portrait img {
+  margin-top: 5px;
+  width: 150px;
+  height: 150px;
+}
+.basic_info {
+  float: left;
+  width: 480px;
+  margin-top: 32px;
+  margin-left: 30px;
+}
+.basic_info dt{
+  font-size: 20px;
+  font-weight: bold;
+}
+.price_dd{
+  font-size: 14px;
+  height: 35px;
+  line-height: 35px;
+  margin: 15px 0;
+}
+.price_dd span{
+  float: left;
+}
+#PriceBlock{
+  color: #F49B01;
+  font-weight: bold;
+  float: left;
+  margin-left: 5px;
+}
+.basic_info .list-module {
+  overflow: hidden;
+  line-height: 24px;
+}
+.list-module span{
+  float: left;
+  font-size: 14px;
+}
+.list-module ul{
+  width: 400px;
+  float: left;
+  margin-left: 5px;
+}
+.list-module ul li{
+  float: left;
+  width: 140px;
+  height: 26px;
+  border: 1px solid #ddd;
+  text-align: center;
+  line-height: 26px;
+  cursor: pointer;
+  margin: 0 15px 10px 0;
+}
+.select{
+  display: block;
+  width: 140px;
+  height: 26px;
+  border: none !important;
+  background: url(../../images/xinmeiti/select.png) no-repeat;
+}
+.btn{
+  padding: 10px 15px;
+  border: none;
+  background: #e4393c;
+  color: #fff;
+  cursor: pointer;
+  margin: 60px 0 0 20px;
+  border-radius: 5px;
+}
+.m-mode{
+  float: left;
+  width: 100%;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  margin: 10px 0;
+}
+.ml-title{
+  width: 100%;
+  padding-left: 10px;
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  border-bottom: 1px solid #FF9C00;
+}
+.m-mode .ml-title span{
+  font-size: 13px;
+  font-weight: normal;
+}
+ul.col_three{
+  padding: 0px 22px 10px;
+  font-size: 14px;
+}
+ul.col_three li{
+  float: left;
+  width: 50%;
+  color: #aaaaaa;
+  height: 30px;
+  line-height: 30px;
+  text-align: left;
+}
+ul.col_three li p{
+  color: #4C4C4C;
+  margin-left: 10px;
+  display: inline-block;
+}
+.per_module{
+  float: left;
+  width: 100%;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  margin: 10px 0;
+}
+ul.col_two{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: 30px 22px 10px;
+  font-size: 14px;
+}
+ul.col_two li{
+  position: relative;
+  float: left;
+  width: 385px;
+  overflow: hidden;
+  cursor: pointer;
+  padding-bottom: 10px;
+  border:1px dashed #ddd;
+  margin: 0 15px 15px 0;
+}
+ul.col_two li:hover{
+  -webkit-box-shadow: 5px 5px 5px #ddd;
+  -moz-box-shadow: 5px 5px 5px #ddd;
+  box-shadow: 5px 5px 5px #ddd;
+}
+ul.col_two li div.pic{
+  float: left;
+  width: 100px;
+  height: 100px;
+      margin-right: 10px;
+}
+ul.col_two li div.pic img{
+  margin: 10px 5px 0 5px;
+  width: 100px;
+  height: 100px;
+}
+ul.col_two li .text dd:first-child{
+ color: #e4393c;
+  font-size: 15px;
+  font-weight: bold;
+}
+ul.col_two li .text dd{
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.btn1{
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  margin: 0!important;
+}
+.s-mode {
+  width: 290px;
+  float: right;
+}
+.more-right {
+  margin: 10px 0 0 0;
+  border: 1px solid #ddd;
+  -webkit-box-shadow: 5px 0 5px #ddd;
+  -moz-box-shadow: 5px 0 5px #ddd;
+  box-shadow: 5px 0 5px #ddd;
+  background: #FFFFFF;
+}
+.more-right .mr-title {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  background: #e1e1e1;
+  color: #4b4b4b;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  padding-left: 20px;
+}
+.more-right .more-people {
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 22px;
+  margin: 10px 0 0 0;
+  overflow: hidden;
+  border-bottom: 1px dotted #ddd;
+}
+.more-right .more-people dt {
+  float: left;
+  width: 89px;
+  height: 89px;
+}
+.more-right .more-people dt img {
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+.more-right .more-people .u-name {
+  color: #4c4c4c;
+  padding-top:15px;
+}
+.more-right .more-people dd {
+  margin-left: 110px;
+}
+.more-right .more-people .u-price {
+  color: #ff9c00;
+}
+.more-right .more-people dd {
+  margin-left: 110px;
+}

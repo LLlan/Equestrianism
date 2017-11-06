@@ -1,0 +1,206 @@
+/*顶部*/
+.main-nav{
+    width: 100%;
+    background: #fff;
+}
+.top-header{
+    width: 1200px;
+    height: 70px;
+    margin: 0 auto;
+}
+
+.top-header .company-name{
+    float: left;
+    height: 70px;
+}
+.h-right{
+    float: right;
+    height: 70px;
+    width: 750px;
+}
+.e_meal{
+    background: url(../../images/xmt/i_ema.png) no-repeat 5px;
+    padding-left: 26px;
+    margin:0 10px;
+}
+.personal-center{
+    float: left;
+    margin-top: 30px;
+}
+.user-quit{
+    float: left;
+    width: 300px;
+    margin-top: 30px;
+}
+.help-conter{
+    float: left;
+    margin-top: 30px;
+    margin-right: 10px;
+}
+.sevice-m{
+    width: 270px;
+    height: 40px;
+    background: url(../../images/xmt/service-mm.png) no-repeat;
+    line-height: 30px;
+    float: right;
+    margin-right: 52px;
+}
+/*导航条*/
+.nav{
+    width: 100%;
+    height: 47px;
+    line-height: 47px;
+    -webkit-box-shadow: 0 3px 5px #ddd;
+    -moz-box-shadow: 0 3px 5px #ddd;
+    box-shadow: 0 3px 5px #ddd;
+    background: #F2F2F2;
+}
+.nav_menu{
+    width: 1160px;
+    height: 47px;
+    line-height: 47px;
+    margin: 3px auto 0 auto;
+}
+.nav_menu ul{
+    margin-top: -15px;
+    float: left;
+}
+.nav_menu ul li{
+    float: left;
+    margin-right: 20px;
+}
+.onx {
+    border-bottom: solid 2px #fdb14e;
+}
+/*充值*/
+.container{
+    width: 1200px;
+    padding: 15px 0;
+    background-color: #fff;
+    margin: 15px auto 0 auto;
+}
+.maintop{
+    margin-top: 20px;
+}
+.container .line-wrap{
+    border: 1px solid #ddd;
+}
+.container .margin-lr{
+    margin: 0 15px;
+}
+.header-tab{
+    height: 44px;
+    line-height: 44px;
+    margin: 35px;
+    border-bottom: 2px solid #ddd;
+}
+.line-wrap .header-tab a{
+    font-size: 15px;
+    padding: 10px;
+    cursor: pointer;
+}
+.line-wrap .header-tab a.active {
+    color: #ff9a00;
+    border-bottom:2px solid  #fdb14e;
+}
+.form-wrap{
+    margin: 0 30px;
+}
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.header-tab a:hover{
+    color: #666;
+}
+ .table>tbody>tr>td {
+    border: 1px solid #ddd;
+}
+.table>tbody>tr{
+    height: 40px;
+    line-height: 40px;
+}
+.table>tbody>tr>td:first-child{
+    width: 110px;
+    text-align: right;
+    padding: 10px;
+}
+.col-sm-3{
+    width: 25%;
+    padding: 0 15px;
+}
+.form-control {
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.075);
+}
+.input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+}
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.input-group .form-control, .input-group-addon, .input-group-btn {
+    display: table-cell;
+}
+.input-group .form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+}
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: #f88613;
+    color: #FFF;
+}
+.bank-info>tbody>tr>td.center {
+    padding-left: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.col-sm-5{
+    width: 41.66666667%;
+    padding: 0 15px;
+}
+.col-sm-5 .form-control{
+    height: auto;
+}
+table.bank-info>tbody>tr td {
+    padding-left: 30px;
+}

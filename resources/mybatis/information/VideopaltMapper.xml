@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="videopaltMapper">
+
+ <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> 
+	<!-- 直播资源列表 -->
+	<select id="videopaltlistPage" parameterType="page" resultType="pd">
+
+		SELECT
+			tvp.videoPlatform_id,
+			tvp.platformName,
+			tvp.number,
+			tvp.sex,
+			tvp.fansNumImgURL,
+			tvp.videoURL,
+			tvp.checkedState,
+			tvp.sourceState, 
+			tvp.mediaOwner_id,
+			tbi.base_information_id,
+			tbi.headImgURL,
+			tbi.fansNum,
+			tbi.name,
+			tbi.province,
+			tbi.city,
+			tbi.introduce,
+			ttp.id,
+			ttp.price
+		FROM tb_video_platform tvp
+		LEFT JOIN tb_base_information tbi on tvp.videoPlatform_id=tbi.f_id
+		LEFT JOIN tb_type_price ttp ON tvp.videoPlatform_id=ttp.f_id
+		
+	</select>
+	
+	<!-- 添加直播资源信息 -->
+	<insert id="saveVideopalt" parameterType="pd">
+		insert into tb_video_platform(
+				videoPlatform_id,
+				platformName,
+				number,
+				sex,
+				fansNumImgURL,
+				videoURL,
+				checkedState,
+				sourceState, 
+				mediaOwner_id
+		)
+			values(
+				#{videoPlatform_id},
+				#{platformName},
+				#{number},
+				#{sex},
+				#{fansNumImgURL},
+				#{videoURL},
+				#{checkedState},
+				#{sourceState},
+				#{mediaOwner_id}
+			)
+			
+	</insert>
+	
+	
+	<!-- 修改主播信息 -->
+	<update id="updateVideopalt" parameterType="pd">
+			update
+				tb_video_platform
+			set
+				platformName = #{platformName},
+				number = #{number},
+				sex = #{sex},
+				fansNumImgURL = #{fansNumImgURL},
+				videoURL = #{videoURL},
+				mediaOwner_id = #{mediaOwner_id}
+			where videoPlatform_id = #{videoPlatform_id}
+	</update>
+	
+	
+	<!-- 刪除主播信息 -->
+	<delete id="delVideopalt" parameterType="pd">
+		delete from tb_video_platform
+		where videoPlatform_id = #{videoPlatform_id}
+		
+	</delete>
+	
+	
+	<!-- 根據ID查詢主播信息 -->
+	<select id="getDetailByID" parameterType="pd" resultType="pd">
+		select 
+			tvp.videoPlatform_id,
+			tvp.platformName,
+			tvp.number,
+			tvp.sex,
+			tvp.fansNumImgURL,
+			tvp.videoURL,
+			tvp.checkedState,
+			tvp.sourceState, 
+			tvp.mediaOwner_id,
+			tbi.base_information_id,
+			tbi.headImgURL,
+			tbi.fansNum,
+			tbi.name,
+			tbi.province,
+			tbi.city,
+			tbi.introduce,
+			ttp.id,
+			ttp.name,
+			ttp.price
+		from tb_video_platform tvp
+		left join tb_base_information tbi on tvp.videoPlatform_id=tbi.f_id
+		left join tb_type_price ttp on tvp.videoPlatform_id=ttp.f_id
+		where videoPlatform_id = #{videoPlatform_id}
+	</select>
+	<!-- 查询直播资源详细信息 -->
+	<select id="getDetailByIDAll" parameterType="pd" resultType="pd">
+		SELECT
+			tvp.videoPlatform_id,
+			tvp.platformName,
+			tvp.number,
+			tvp.sex,
+			tvp.checkedState,
+			tvp.fansNumImgURL,
+			tvp.videoURL,
+			tvp.sourceState,
+			tbi.base_information_id,
+			tbi.headImgURL,
+			tbi.fansNum,
+			tbi.name,
+			tbi.province,
+			tbi.city,
+			tbi.introduce,
+			ttp.name sname,
+			ttp.price
+		FROM tb_video_platform tvp
+		LEFT JOIN tb_base_information tbi  ON tvp.videoPlatform_id=tbi.f_id
+		LEFT JOIN tb_type_price ttp ON tvp.videoPlatform_id=ttp.f_id
+		where ttp.f_id=#{f_id} and ttp.name in('专场直播','直播插入');
+	</select>
+	<!-- 不包含目标ID的集合 -->
+	 <select id="getNotID" parameterType="pd" resultType="pd">
+		SELECT *
+		FROM tb_video_platform tvp
+		LEFT JOIN tb_base_information tbi
+		ON tvp.videoPlatform_id=tbi.f_id
+	</select>
+	<!-- 
+		张建华
+		统计使用
+	-->
+	<select id="getlistAllbyfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			*
+		from tb_video_platform tvp
+		where
+		  tvp.mediaOwner_id=#{f_id}
+		  <if test="checkedState!='' and checkedState!=null">
+		  	and tvp.checkedState=#{checkedState}
+		  </if>
+		  <if test="sourceState!='' and sourceState!=null">
+		  	and tvp.sourceState=#{sourceState}
+		  </if>
+	</select>
+	<select id="getfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			*
+		 from tb_base_information tb left join tb_video_platform tv on tb.f_id=tv.videoPlatform_id
+		 where f_id=#{tid}
+	</select>
+
+	<!--============================后台服务号功能star(张建华)============================================================ -->	
+	
+	<!-- 
+		查询所有的信息(后台系统设置页面展示)
+	 -->
+	 <select id="sysgetlistPage" parameterType="page" resultType="pd" useCache="false">
+		 select 
+			tvp.videoPlatform_id,
+			tvp.platformName,
+			tbi.name,
+			tvp.number,
+			tbi.fansNum,
+			tvp.sex,
+			tbi.headImgURL,
+			tvp.fansNumImgURL,
+			tvp.videoURL,
+			tvp.checkedState,
+			tbi.time
+		from tb_video_platform tvp
+		  LEFT JOIN tb_base_information tbi  ON tvp.videoPlatform_id=tbi.f_id
+	    <where>
+		 	<if test="pd.searchName!=null and pd.searchName!=''">
+		 		tbi.name LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%') 
+		 		or tvp.platformName LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%')
+		 	</if>
+		 	<if test="pd.selectName!=null and pd.selectName!=''">
+		 		and tvp.checkedState=#{pd.selectName}
+		 	</if>
+	    </where>
+		order by tbi.time desc  
+	</select>
+	<!-- 
+		系统审核功能之审核不通过
+	 -->
+	 <update id="syscheckedNo" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState=#{checkedState}
+			where videoPlatform_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之审核通过
+	 -->
+	 <update id="syscheckedYes" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState=#{checkedState},
+				sourceState=#{sourceState}
+			where videoPlatform_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之批量审核不通过
+	 -->
+	 <update id="syscheckedNoAll" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState="0"
+			where videoPlatform_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 
+		系统审核功能之批量审核通过
+	 -->
+	 <update id="syscheckedYesAll" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState="1",
+				sourceState="1"
+			where videoPlatform_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!--============================后台服务号功能end============================================================ -->	
+
+	
+	<!-- 媒介主修改资源上架状态 -->
+	<update id="updateSource" parameterType="pd">
+		UPDATE
+		tb_video_platform tvp
+		SET
+		tvp.sourceState=#{sourceState}
+		WHERE tvp.videoPlatform_id=#{videoPlatform_id}
+	
+	</update>
+
+</mapper>

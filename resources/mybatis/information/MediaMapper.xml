@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mediaMapper">
+
+<!--  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>  -->
+ 	<!-- 新闻资源列表 -->
+ 	<select id="medialistPage" parameterType="page" resultType="pd">
+ 	<!-- 这条被注释的SQL是原本的SQL，现在分成《新闻资源表》和《广告招商表》 -->
+
+		SELECT 
+			tm.media_id,
+			tm.media_name,
+			tm.channelName,
+			tm.media_logo,
+			resourceName,
+			tm.media_level,
+			tm.linkeHttp,
+			tm.linkeHttp_img,
+			tm.resourceType,
+			tm.rukouType,
+			tm.textLink_type,
+			tm.baidu_resource,
+			tm.sourceState,
+			tm.checkedState,
+			tm.media_intro,
+			ttp.id,
+			ttp.price
+		FROM tb_media tm
+		LEFT JOIN tb_type_price ttp  on tm.media_id=ttp.f_id
+
+
+		where tm.resourceType='0' 
+
+
+	</select>
+	
+	
+	
+	<!-- 广告主方向的新闻发布资源列表 -->
+	<select id="medialistPage2" parameterType="pd" resultType="pd">
+		SELECT 
+			tm.media_id,
+			tm.media_name,
+			tm.media_logo,
+			tm.resourceName,
+			tm.baidu_resource,
+			tm.sourceState,
+			tm.checkedState,
+			tm.media_intro,
+			ttp.id,
+			ttp.price
+		FROM tb_media tm
+		LEFT JOIN tb_type_price ttp ON tm.media_id=ttp.f_id
+		WHERE tm.sourceState='1' AND tm.checkedState='1' AND tm.resourceType='0'
+	</select>
+	
+	
+	
+	<!-- 保存新&网信息 -->
+	<insert id="saveMedia" parameterType="pd">
+		insert into tb_media(
+				media_id,
+				media_name,
+				channelName,
+				media_logo,
+				resourceName,
+				media_level,
+				linkeHttp,
+				linkeHttp_img,
+				resourceType,
+				rukouType,
+				textLink_type,
+				baidu_resource,
+				sourceState,
+				checkedState,
+				media_intro,
+				time,
+				mediaOwner_id
+		)
+			values(
+				#{media_id},
+				#{media_name},
+				#{channelName},
+				#{media_logo},
+				#{resourceName},
+				#{media_level},
+				#{linkeHttp},
+				#{linkeHttp_img},
+				#{resourceType},
+				#{rukouType},
+				#{textLink_type},
+				#{baidu_resource},
+				#{sourceState},
+				#{checkedState},
+				#{media_intro},
+				#{time},
+				#{mediaOwner_id}
+			)
+			
+	</insert>
+ 	<!-- 修改新&网信息 -->
+ 	<update id="updateMedia" parameterType="pd">
+			update
+				tb_media tm
+			set
+				tm.media_name=#{media_name},
+				tm.channelName=#{channelName},
+				tm.media_logo=#{media_logo},
+				tm.resourceName=#{resourceName},
+				tm.media_level=#{media_level},
+				tm.linkeHttp=#{linkeHttp},
+				tm.linkeHttp_img=#{linkeHttp_img},
+				tm.resourceType=#{resourceType},
+				tm.rukouType=#{rukouType},
+				tm.textLink_type=#{textLink_type},
+				tm.baidu_resource=#{baidu_resource},
+				tm.media_intro=#{media_intro}
+			where tm.media_id=#{media_id}
+	</update>
+	
+ 	<!-- 刪除新&网信息 -->
+ 	<delete id="delMedia" parameterType="pd">
+		delete from tb_media
+		where media_id = #{media_id}
+		
+	</delete>
+ 	<!-- 根據ID查詢新&网信息 -->
+ 	<select id="getDetailByID" parameterType="pd" resultType="pd">
+		select 
+				tm.media_id,
+				tm.media_name,
+				tm.channelName,
+				tm.resourceName,
+				tm.media_level,
+				tm.linkeHttp,
+				tm.linkeHttp_img,
+				tm.resourceType,
+				tm.rukouType,
+				tm.textLink_type,
+				tm.baidu_resource,
+				tm.media_intro,
+				tm.mediaOwner_id,
+				ttp.id,
+				ttp.price,
+				ttp.name
+		from tb_media tm
+		left join tb_type_price ttp on tm.media_id=ttp.f_id
+		where media_id = #{media_id}
+			
+	</select>
+ 
+ 	<!-- 随机查询 -->
+	<select id="getDataByRandom" parameterType="pd" resultType="pd">
+		SELECT
+			md.media_id,
+			md.media_logo,
+			md.media_name,
+			md.media_intro
+		FROM tb_media md
+		ORDER BY RAND()
+		LIMIT 4
+		
+	</select> 
+	
+	<!-- 取出不包含目标ID的集合 -->
+ 	<select id="getNotID" parameterType="pd" resultType="pd">
+ 		SELECT  
+ 			tm.media_id,
+			tm.media_name,
+			tm.media_logo,
+			tm.resourceName,
+			tm.sourceState,
+			tm.checkedState,
+			tm.media_intro,
+			ttp.id,
+			ttp.price,
+			ttp.name
+		FROM tb_media tm
+		LEFT JOIN tb_type_price ttp  on tm.media_id=ttp.f_id
+ 		WHERE media_id!=#{media_id}
+ 	</select>
+ 	
+ 	<!-- 为广告招商模块写的根据ID查询，用到了关联表查询 -->
+ 	<!-- <select id="getDataByAdv" parameterType="pd" resultType="pd">
+ 		SELECT *
+		from tb_media tm
+		LEFT JOIN tb_advertise_otherinfor tao ON tm.media_id=tao.media_id
+		LEFT JOIN tb_type_price ttp ON tm.media_id=ttp.f_id
+		WHERE tm.media_id=#{media_id}
+ 	</select> -->
+ 	
+ 	<!-- 
+		张建华
+		统计使用
+	
+	-->
+	<select id="getlistAllbyfid" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			*
+		from tb_media tm
+		where
+		  tm.mediaOwner_id=#{f_id}
+		  <if test="checkedState!='' and checkedState!=null">
+		  	and tm.checkedState=#{checkedState}
+		  </if>
+		  <if test="sourceState!='' and sourceState!=null">
+		  	and tm.sourceState=#{sourceState}
+		  </if>
+		  and tm.resourceType=#{resourceType}
+	</select>
+	
+	<!-- 启用media资源 -->
+	<update id="OpensourceState" parameterType="pd">
+		UPDATE 
+		tb_media tm
+		SET
+		tm.sourceState='1'
+		WHERE tm.media_id=#{media_id}
+	</update>
+	
+	<!-- 下架media资源 -->
+	<update id="EndsourceState" parameterType="pd">
+		UPDATE 
+		tb_media tm
+		SET
+		tm.sourceState='0'
+		WHERE tm.media_id=#{media_id}
+	</update>
+	
+	<!--============================后台服务号功能star(张建华)============================================================ -->	
+	
+	<!-- 
+		查询所有的信息(后台系统设置页面展示)
+	 -->
+	 <select id="sysgetlistPage" parameterType="page" resultType="pd" useCache="false">
+		 select 
+			tvp.videoPlatform_id,
+			tvp.platformName,
+			tvp.number,
+			tvp.checkedState,
+			tvp.fansNumImgURL,
+			tvp.videoURL,
+			tvp.sex,
+			tbi.headImgURL,
+			tbi.name,
+			tbi.fansNum,
+			tbi.time
+		from tb_video_platform tvp
+		  LEFT JOIN tb_base_information tbi  ON tvp.videoPlatform_id=tbi.f_id
+	    <where>
+		 	<if test="pd.searchName!=null and pd.searchName!=''">
+		 		tbi.name LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%') 
+		 		or tvp.platformName LIKE CONCAT(CONCAT('%', #{pd.searchName}),'%')
+		 	</if>
+		 	<if test="pd.selectName!=null and pd.selectName!=''">
+		 		and tvp.checkedState=#{pd.selectName}
+		 	</if>
+	    </where>
+		order by tbi.time desc  
+	</select>
+	<!-- 
+		系统审核功能之审核不通过
+	 -->
+	 <update id="syscheckedNo" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState=#{checkedState}
+			where videoPlatform_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之审核通过
+	 -->
+	 <update id="syscheckedYes" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState=#{checkedState},
+				sourceState=#{sourceState}
+			where videoPlatform_id=#{tagID}
+	</update>
+	<!-- 
+		系统审核功能之批量审核不通过
+	 -->
+	 <update id="syscheckedNoAll" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState="0"
+			where videoPlatform_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!-- 
+		系统审核功能之批量审核通过
+	 -->
+	 <update id="syscheckedYesAll" parameterType="pd">
+		update tb_video_platform
+			set
+				checkedState="1",
+				sourceState="1"
+			where videoPlatform_id in
+			<foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	<!--============================后台服务号功能end============================================================ -->	
+ </mapper>

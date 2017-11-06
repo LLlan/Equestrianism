@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="advertiserMapper">
+
+	<!-- 根据手机号和roleMark查询对象 验证是否注册-->
+	<select id="selByPhone" parameterType="pd" resultType="pd" useCache="false">
+		select 
+			advertiser_id
+		from 
+			tb_advertiser
+		where 
+			phone = #{phone}
+			and rolMark=#{rolMark}
+	</select>
+	<!-- 重置密码 -->
+	<update id="updataPsw" parameterType="pd">
+		update tb_advertiser
+			set
+				password=#{password}
+		where 
+			advertiser_id=#{advertiser_id}
+	</update>
+	<!-- 根据手机号和密码查询对象 登录使用-->
+	<select id="selByPhoneAndPaw" parameterType="pd" resultType="pd" useCache="false">
+		select *
+		from 
+			tb_advertiser
+		where 
+			phone = #{phone} and password = #{password} and rolMark=#{rolMark}
+	</select>
+	<!-- 添加媒介主用户信息 -->
+	<insert id="addAdvertiser" parameterType="pd">
+		insert into tb_advertiser(
+			advertiser_id,
+			phone,
+			password,
+			linkmanQQ,
+			rolMark
+		)values(
+			#{advertiser_id},
+			#{phone},
+			#{password},
+			#{linkmanQQ},
+			#{rolMark}
+		)
+	</insert>
+	<!-- 用户中心的资料编辑 -->
+	<update id="editInformation" parameterType="pd">
+		update tb_advertiser
+			<set>
+				nikeName=#{nikeName},
+				linkman=#{linkman},
+				email=#{email},
+				<if test="rolMark=='1'">
+				company=#{company},
+				</if>
+				<if test="rolMark=='2'">
+				weixinAccount=#{weixinAccount},
+				</if>
+			</set>
+		where 
+			advertiser_id=#{advertiser_id}
+	</update>
+	
+	
+	
+	<!-- 媒介主个人中心的资源数量统计 -->
+	<select id="selCountNum" parameterType="pd" resultType="pd" useCache="false">
+		SELECT
+			tspt.tspnum nump,
+			tsft.tsfnum numf,
+			tsmt.tsmnum numm,
+			tvpt.tvpnum numv,
+			tmxt.tmxnum numx,
+			tmgt.tmgnum numg,
+			tspt.tspnum + tsft.tsfnum + tsmt.tsmnum + tvpt.tvpnum + tmxt.tmxnum + tmgt.tmgnum numz
+		FROM
+			(
+				SELECT count(*) tspnum FROM tb_source_wcpublic tsp
+				WHERE
+					tsp.f_id = #{f_id}
+					<if test="checkedState!='' and checkedState!=null">
+					AND tsp.checkedState = #{checkedState}
+					</if>
+					<if test="sourceState!='' and sourceState!=null">
+					AND tsp.sourceState = #{sourceState}
+					</if>
+			) tspt,
+			(
+				SELECT count(*) tsfnum FROM tb_source_wcfriends tsf
+				WHERE
+					tsf.f_id = #{f_id}
+					<if test="checkedState!='' and checkedState!=null">
+					AND tsf.checkedState = #{checkedState}
+					</if>
+					<if test="sourceState!='' and sourceState!=null">
+					AND tsf.sourceState = #{sourceState}
+					</if>
+			) tsft,
+			(
+				SELECT COUNT(*) tsmnum FROM tb_source_microbblog tsm
+				WHERE
+					tsm.f_id = #{f_id}
+					<if test="checkedState!='' and checkedState!=null">
+					AND tsm.checkedState = #{checkedState}
+					</if>
+					<if test="sourceState!='' and sourceState!=null">
+					AND tsm.sourceState = #{sourceState}
+					</if>
+			) tsmt,
+			(
+				SELECT COUNT(*) tvpnum FROM tb_video_platform tvp
+				WHERE
+					tvp.mediaOwner_id = #{f_id}
+					<if test="checkedState!='' and checkedState!=null">
+					AND tvp.checkedState = #{checkedState}
+					</if>
+					<if test="sourceState!='' and sourceState!=null">
+					AND tvp.sourceState = #{sourceState}
+					</if>
+			) tvpt,
+			(
+				SELECT COUNT(*) tmxnum FROM tb_media tmx
+				WHERE
+					tmx.mediaOwner_id = #{f_id} and tmx.resourceType='0'
+					<if test="checkedState!='' and checkedState!=null">
+					AND tmx.checkedState = #{checkedState}
+					</if>
+					<if test="sourceState!='' and sourceState!=null">
+					AND tmx.sourceState = #{sourceState}
+					</if>
+			) tmxt,
+			(
+				SELECT COUNT(*) tmgnum FROM tb_media tmg
+				WHERE
+					tmg.mediaOwner_id = #{f_id} and tmg.resourceType='1'
+					<if test="checkedState!='' and checkedState!=null">
+					AND tmg.checkedState = #{checkedState}
+					</if>
+					<if test="sourceState!='' and sourceState!=null">
+					AND tmg.sourceState = #{sourceState}
+					</if>
+			) tmgt
+	</select>
+</mapper>
